@@ -1,0 +1,11 @@
+[Project]
+Defines=AURORA_TOOL
+DebugDefines=AURORA_DEBUGG
+ReleaseDefines=AURORA_RELEASE
+ProfileDefines=AURORA_PROFILE
+FinalDefines=AURORA_FINAL;AURORA_RETAIL
+IncludePaths=../../../../Shared;../../../../Tools/Shared;../../../../External/Packages/freetype-2.1.10/include;../../../../External/Packages/Lua/include
+LibraryPaths=../../../../External/Packages/freetype-2.1.10/lib;../../../../External/Packages/Lua/lib
+
+[Solution]
+DependenciesPaths=../../../../Shared;../../../../Tools/Shared
