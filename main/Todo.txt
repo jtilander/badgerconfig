@@ -1,4 +1,2 @@
-- See if we can automatically generate the UUIDs from the library name and the parent
-  name.
 - C# support?
 - Support for bulk builds

@@ -73,7 +73,7 @@ def copyDictWithExclusions( general, excludedKeys ):
 		result[ name ] = value
 	return result
 
-def parseSection(baseDir, sectionName, defaultDict, parser):
+def parseSection(baseDir, sectionName, defaultDict, parser, errorDict):
 	result = copy.deepcopy(defaultDict)
 	try:
 		for name, value in parser.items(sectionName):
@@ -93,14 +93,22 @@ def parseSection(baseDir, sectionName, defaultDict, parser):
 			else:
 				result[ key ] = value
 	except ConfigParser.NoSectionError:
-		return {}
+		return errorDict
 	return result
 
 def loadDefaultDict( platform, section, default ):
 	filename = os.path.join( TEMPLATES_DIR, platform, 'MasterConfig' )
 	myParser = ConfigParser.ConfigParser()
 	myParser.read(filename)
-	return parseSection( os.path.dirname(filename), section, default, myParser )
+	return parseSection( os.path.dirname(filename), section, default, myParser, {} )
+
+def generateUUID( name, platform ):
+	text = name + '/' + platform
+	import md5
+	hexdigest = md5.new( text ).hexdigest()
+	# HexDigest is 32 hex characters long, the UUID is 8-4-4-4-12 characters long == 32.
+	result = '%s-%s-%s-%s-%s' % (hexdigest[0:8], hexdigest[8:12], hexdigest[12:16], hexdigest[16:20], hexdigest[20:32])
+	return result
 
 def readConfiguration(configFileName):
 	"""
@@ -121,17 +129,20 @@ def readConfiguration(configFileName):
 	generalDict = {}
 	generalDict['platform'] = parentDir
 	generalDict['name'] = fileName
-	generalDict = parseSection(baseDir, GENERAL_SECTION_NAME, generalDict, parser)
+	generalDict = parseSection(baseDir, GENERAL_SECTION_NAME, generalDict, parser, generalDict)
 		
 	if 'type' not in generalDict:
 		raise SyntaxError('Must have a type key in the general section, choose from %s (offending file was %s)' % (str(VALID_CONFIG_TYPES), configFileName) )
 	
 	projectDict = loadDefaultDict(generalDict['platform'], PROJECT_SECTION_NAME, copyDictWithExclusions(generalDict, GENERAL_SECTION_ONLY_VARIABLES))
-	projectDict = parseSection(baseDir, PROJECT_SECTION_NAME, projectDict, parser)
+	projectDict = parseSection(baseDir, PROJECT_SECTION_NAME, projectDict, parser, projectDict)
+	
+	if 'uuid' not in projectDict:
+		projectDict['uuid'] = generateUUID(fileName, parentDir)
 
 	solutionDict = loadDefaultDict(generalDict['platform'], SOLUTION_SECTION_NAME, copyDictWithExclusions(generalDict, GENERAL_SECTION_ONLY_VARIABLES))
-	solutionDict = parseSection(baseDir, SOLUTION_SECTION_NAME, solutionDict, parser)
-	
+	solutionDict = parseSection(baseDir, SOLUTION_SECTION_NAME, solutionDict, parser, {})
+		
 	#print generalDict
 	#print projectDict
 	#print "Solution dict: " + str(solutionDict)
