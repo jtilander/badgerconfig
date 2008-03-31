@@ -21,9 +21,9 @@ class FileItem:
 	def __repr__(self):
 		return '%s -> %s | %s' % (self.fullpath, self.outputBase, self.options)
 
-	def gebasename(self):
+	def basename(self):
 		return os.path.splitext(os.path.basename(self.fullpath))[0].lower()
-	basename = property(gebasename)
+	basename = property(basename)
 
 def parseFromLine(basePath, line):
 	result = FileItem()
@@ -70,7 +70,8 @@ def fixupUnique( fileItems ):
 	# First just separate the non object generating files into the result. Save the ones that do generate object files into a special list for later 
 	# check for uniqueness.
 	for item in fileItems:
-		name, ext = os.path.splitext(os.path.basename(item.fullpath))
+		name = item.basename
+		ext = os.path.splitext(name)[1]
 		if ext in OBJECT_GENERATING_EXTENSIONS:
 			objectGeneratingFiles.append(item)
 		else:

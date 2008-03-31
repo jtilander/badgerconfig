@@ -79,13 +79,15 @@ def parseSection(baseDir, sectionName, defaultDict, parser, errorDict):
 		for name, value in parser.items(sectionName):
 			key = name.lower()
 			# Special parsing of variables that are comma separated paths, they should always refer relative to the configuration file.
+			if key.endswith('path'):
+				value = convertToAbsolutePathList(baseDir, value, ';')
 			if key.endswith('paths'):
 				value = convertToAbsolutePathList(baseDir, value, ';')
 				value = ensureLeadingSeparator(value,';')
 			if key.endswith('defines'):
 				value = ensureLeadingSeparator(value,';')
 			if key in result.keys():
-				if key.endswith('defines') or key.endswith('paths') or key.endswith('options'):
+				if key.endswith('defines') or key.endswith('paths') or key.endswith('options') or key.endswith('libraries'):
 					old = result[ key ]
 					result[ key ] = old + value
 				else:
@@ -173,6 +175,8 @@ def replaceKeywords( basePath, template, projectDict, fixupRules ):
 	for keyword in keywords:
 		try:
 			value = projectDict[keyword]
+			if keyword.endswith('path'):
+				value = PathHelp.relative( basePath, value ).replace(os.sep,'/') 
 			if keyword.endswith('paths'):
 				value = convertToRelativeList( basePath, value, ';' )
 			try:

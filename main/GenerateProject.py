@@ -17,7 +17,6 @@ HELP = 'Usage: %s <configfile>' % sys.argv[0]
 VISUAL_STUDIO_TEMPLATE = 'CppBuildTemplate.vcproj'
 
 LINK_SECTION =  {
-
 	'debug':
 """			<Tool
 				Name="VCLinkerTool"
@@ -25,7 +24,7 @@ LINK_SECTION =  {
 				UseLibraryDependencyInputs="true"
 				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
+				OutputFile="%%%OUTPUTFILE%%%"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
@@ -51,7 +50,7 @@ LINK_SECTION =  {
 				UseLibraryDependencyInputs="true"
 				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
+				OutputFile="%%%OUTPUTFILE%%%"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
@@ -77,7 +76,7 @@ LINK_SECTION =  {
 				UseLibraryDependencyInputs="false"
 				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
+				OutputFile="%%%OUTPUTFILE%%%"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
@@ -103,7 +102,114 @@ LINK_SECTION =  {
 				UseLibraryDependencyInputs="false"
 				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
+				OutputFile="%%%OUTPUTFILE%%%"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
+				GenerateManifest="true"
+				ModuleDefinitionFile=""
+				GenerateDebugInformation="true"
+				GenerateMapFile="true"
+				MapFileName="$(TargetDir)$(TargetName).map"
+				MapExports="false"
+				SubSystem="1"
+				StackReserveSize="1048576"
+				StackCommitSize="1048576"
+				LargeAddressAware="2"
+				TargetMachine="1"
+				AllowIsolation="true"
+				Profile="false"
+			/>"""
+}
+
+
+DLL_LINK_SECTION = {
+	'debug':
+"""			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="true"
+				UseLibraryDependencyInputs="true"
+				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
+				ShowProgress="0"
+				OutputFile="%%%OUTPUTFILE%%%"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
+				GenerateManifest="true"
+				ModuleDefinitionFile=""
+				GenerateDebugInformation="true"
+				GenerateMapFile="true"
+				MapFileName="$(TargetDir)$(TargetName).map"
+				MapExports="false"
+				SubSystem="1"
+				StackReserveSize="1048576"
+				StackCommitSize="1048576"
+				LargeAddressAware="2"
+				TargetMachine="1"
+				AllowIsolation="true"
+				Profile="false"
+			/>""",
+
+	'release':
+"""			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="true"
+				UseLibraryDependencyInputs="true"
+				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
+				ShowProgress="0"
+				OutputFile="%%%OUTPUTFILE%%%"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
+				GenerateManifest="true"
+				ModuleDefinitionFile=""
+				GenerateDebugInformation="true"
+				GenerateMapFile="true"
+				MapFileName="$(TargetDir)$(TargetName).map"
+				MapExports="false"
+				SubSystem="1"
+				StackReserveSize="1048576"
+				StackCommitSize="1048576"
+				LargeAddressAware="2"
+				TargetMachine="1"
+				AllowIsolation="true"
+				Profile="false"
+			/>""",
+
+	'profile':
+"""			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="true"
+				UseLibraryDependencyInputs="false"
+				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
+				ShowProgress="0"
+				OutputFile="%%%OUTPUTFILE%%%"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
+				GenerateManifest="true"
+				ModuleDefinitionFile=""
+				GenerateDebugInformation="true"
+				GenerateMapFile="true"
+				MapFileName="$(TargetDir)$(TargetName).map"
+				MapExports="false"
+				SubSystem="1"
+				StackReserveSize="1048576"
+				StackCommitSize="1048576"
+				LargeAddressAware="2"
+				TargetMachine="1"
+				AllowIsolation="true"
+				Profile="false"
+			/>""",
+
+	'final':
+"""			<Tool
+				Name="VCLinkerTool"
+				LinkLibraryDependencies="true"
+				UseLibraryDependencyInputs="false"
+				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
+				ShowProgress="0"
+				OutputFile="%%%OUTPUTFILE%%%"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
@@ -130,6 +236,7 @@ LIBRARIAN_SECTION = {
 				LinkLibraryDependencies="false"
 				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
 				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
+				OutputFile="%%%OUTPUTFILE%%%"
 				SuppressStartupBanner="true"
 				AdditionalOptions="/IGNORE:4221 /IGNORE:4006"
 			/>""",
@@ -139,6 +246,7 @@ LIBRARIAN_SECTION = {
 				LinkLibraryDependencies="false"
 				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
 				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
+				OutputFile="%%%OUTPUTFILE%%%"
 				SuppressStartupBanner="true"
 				AdditionalOptions="/IGNORE:4221  /IGNORE:4006"
 			/>""",
@@ -148,6 +256,7 @@ LIBRARIAN_SECTION = {
 				LinkLibraryDependencies="false"
 				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
 				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
+				OutputFile="%%%OUTPUTFILE%%%"
 				SuppressStartupBanner="true"
 				AdditionalOptions="/IGNORE:4221  /IGNORE:4006"
 			/>""",
@@ -157,6 +266,7 @@ LIBRARIAN_SECTION = {
 				LinkLibraryDependencies="false"
 				AdditionalDependencies="%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%"
 				AdditionalLibraryDirectories="%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%"
+				OutputFile="%%%OUTPUTFILE%%%"
 				SuppressStartupBanner="true"
 				AdditionalOptions="/IGNORE:4221  /IGNORE:4006"
 			/>"""
@@ -285,11 +395,15 @@ def readTemplate(generalDict):
 	if generalDict['type'] == 'ConsoleApplication':
 		linkSectionTemplate = LINK_SECTION
 		configType = '1'
+		defaultOutput = r'$(OutDir)\$(ProjectName).exe'
 	elif generalDict['type'] == 'StaticLibrary':
 		linkSectionTemplate = LIBRARIAN_SECTION
 		configType = '4'
+		defaultOutput = r'$(OutDir)\$(ProjectName).lib'
 	elif generalDict['type'] == 'DynamicLibrary':
-		raise KeyError( 'Not implemented DynamicLibrary yet!!!' )
+		configType = '2'
+		defaultOutput = r'$(OutDir)\$(ProjectName).dll'
+		linkSectionTemplate = DLL_LINK_SECTION
 	else:
 		raise SyntaxError( 'Unsupported type!' )
 	
@@ -300,7 +414,7 @@ def readTemplate(generalDict):
 		template = template.replace( '{{{%s_LINK_SECTION}}}' % config.upper(), linkSection )
 	
 	template = template.replace( '{{{CONFIG_TYPE}}}', configType )
-	return template
+	return template, defaultOutput
 
 def getConfigType(generalDict):
 	if generalDict['type'] == 'ConsoleApplication':
@@ -308,7 +422,7 @@ def getConfigType(generalDict):
 	elif generalDict['type'] == 'StaticLibrary':
 		return '4'
 	elif generalDict['type'] == 'DynamicLibrary':
-		raise KeyError( 'Not implemented DynamicLibrary yet!!!' )
+		return '2'
 	else:
 		raise SyntaxError( 'Unsupported type!' )
 
@@ -344,8 +458,13 @@ def main( argv ):
 		# before the general substiution engine can have it's turn
 		sourceFiles = FileItem.readSourceFiles( basePath, generalDict['sourcefiles'] )
 		filesSection = generateFiles( os.path.dirname(targetName), sourceFiles )
-		template = readTemplate(generalDict)
+		template, defaultOutput = readTemplate(generalDict)
 		template = template.replace( r'%%%FILES%%%', filesSection )
+		
+		if 'outputfile' not in projectDict:
+			projectDict['outputfile'] = defaultOutput
+		if 'debuginformationformat' not in projectDict:
+			projectDict['debuginformationformat'] = '3'
 		
 		projectDict['configurationtype'] = getConfigType(generalDict)
 		

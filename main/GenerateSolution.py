@@ -105,7 +105,7 @@ def main( argv ):
 		return 1
 
 	if len(argv) == 1:
-		# Single configuration mode.
+		# Single configuration mode. Deduce the 
 		configFileName = os.path.abspath(argv[0])
 		basePath = os.path.dirname(configFileName)
 		try:
@@ -153,7 +153,10 @@ def main( argv ):
 			continue
 
 		baseProject = os.path.splitext(item)[0] + '.vcproj'
-		dependencies = Engine.findDependencies( basePath, solutionDict['dependencies'], solutionDict['dependenciespaths'], generalDict['platform'], generateSearchName )
+		try:
+			dependencies = Engine.findDependencies( basePath, solutionDict['dependencies'], solutionDict['dependenciespaths'], generalDict['platform'], generateSearchName )
+		except KeyError:
+			dependencies = []
 		
 		# HACK: The platform will just be the last one referenced.
 		platform = generalDict['platform']

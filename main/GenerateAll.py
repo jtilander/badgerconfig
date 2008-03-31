@@ -31,7 +31,7 @@ def main( argv ):
 		logging.info( '%s' % config )
 		GenerateProject.main([config])
 	
-	if len(argv) == 1 and argv[0] == 'sln':
+	if 'sln' in argv:
 		logging.info( 'Generating solutions...' )
 		okSolutions = 0
 		for config in configFiles:
@@ -39,6 +39,8 @@ def main( argv ):
 				okSolutions += 1
 				logging.info( '%s' % config )
 		logging.info( 'Generated %d solutions' % okSolutions )
+	else:
+		logging.info( 'Skipping sln generation, specify "sln" on the command line to generate solutions' )
 	return 0
 
 if __name__ == '__main__':
