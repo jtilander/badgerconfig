@@ -34,7 +34,7 @@ LINK_SECTION =  {
 				GenerateMapFile="true"
 				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="false"
-				SubSystem="1"
+				SubSystem="%%%SUBSYSTEM%%%"
 				StackReserveSize="1048576"
 				StackCommitSize="1048576"
 				LargeAddressAware="2"
@@ -60,7 +60,7 @@ LINK_SECTION =  {
 				GenerateMapFile="true"
 				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="false"
-				SubSystem="1"
+				SubSystem="%%%SUBSYSTEM%%%"
 				StackReserveSize="1048576"
 				StackCommitSize="1048576"
 				LargeAddressAware="2"
@@ -86,7 +86,7 @@ LINK_SECTION =  {
 				GenerateMapFile="true"
 				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="false"
-				SubSystem="1"
+				SubSystem="%%%SUBSYSTEM%%%"
 				StackReserveSize="1048576"
 				StackCommitSize="1048576"
 				LargeAddressAware="2"
@@ -112,7 +112,7 @@ LINK_SECTION =  {
 				GenerateMapFile="true"
 				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="false"
-				SubSystem="1"
+				SubSystem="%%%SUBSYSTEM%%%"
 				StackReserveSize="1048576"
 				StackCommitSize="1048576"
 				LargeAddressAware="2"
@@ -141,7 +141,7 @@ DLL_LINK_SECTION = {
 				GenerateMapFile="true"
 				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="false"
-				SubSystem="1"
+				SubSystem="%%%SUBSYSTEM%%%"
 				StackReserveSize="1048576"
 				StackCommitSize="1048576"
 				LargeAddressAware="2"
@@ -167,7 +167,7 @@ DLL_LINK_SECTION = {
 				GenerateMapFile="true"
 				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="false"
-				SubSystem="1"
+				SubSystem="%%%SUBSYSTEM%%%"
 				StackReserveSize="1048576"
 				StackCommitSize="1048576"
 				LargeAddressAware="2"
@@ -193,7 +193,7 @@ DLL_LINK_SECTION = {
 				GenerateMapFile="true"
 				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="false"
-				SubSystem="1"
+				SubSystem="%%%SUBSYSTEM%%%"
 				StackReserveSize="1048576"
 				StackCommitSize="1048576"
 				LargeAddressAware="2"
@@ -219,7 +219,7 @@ DLL_LINK_SECTION = {
 				GenerateMapFile="true"
 				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="false"
-				SubSystem="1"
+				SubSystem="%%%SUBSYSTEM%%%"
 				StackReserveSize="1048576"
 				StackCommitSize="1048576"
 				LargeAddressAware="2"
@@ -394,19 +394,33 @@ def readTemplate(generalDict):
 	
 	if generalDict['type'] == 'ConsoleApplication':
 		linkSectionTemplate = LINK_SECTION
-		configType = '1'
 		defaultOutput = r'$(OutDir)\$(ProjectName).exe'
+		mfcMode = 0
+		subSystem = 1
+	elif generalDict['type'] == 'WindowsApplication':
+		linkSectionTemplate = LINK_SECTION
+		defaultOutput = r'$(OutDir)\$(ProjectName).exe'
+		mfcMode = 0
+		subSystem = 2
 	elif generalDict['type'] == 'StaticLibrary':
 		linkSectionTemplate = LIBRARIAN_SECTION
-		configType = '4'
 		defaultOutput = r'$(OutDir)\$(ProjectName).lib'
+		mfcMode = 0
+		subSystem = 1
 	elif generalDict['type'] == 'DynamicLibrary':
-		configType = '2'
 		defaultOutput = r'$(OutDir)\$(ProjectName).dll'
 		linkSectionTemplate = DLL_LINK_SECTION
+		mfcMode = 0
+		subSystem = 1
+	elif generalDict['type'] == 'MfcApplication':
+		linkSectionTemplate = LINK_SECTION
+		defaultOutput = r'$(OutDir)\$(ProjectName).exe'
+		mfcMode = 2
+		subSystem = 2
 	else:
 		raise SyntaxError( 'Unsupported type!' )
 	
+	configType = getConfigType(generalDict)
 	template = file(filename).read()
 	# Replace the link section
 	for config, platform in [x.split('|') for x in Engine.CONFIGURATION_NAMES]:
@@ -414,15 +428,22 @@ def readTemplate(generalDict):
 		template = template.replace( '{{{%s_LINK_SECTION}}}' % config.upper(), linkSection )
 	
 	template = template.replace( '{{{CONFIG_TYPE}}}', configType )
+	template = template.replace('{{{MFCMODE}}}', str(mfcMode))
+	template = template.replace(r'%%%SUBSYSTEM%%%', str(subSystem))
+	
 	return template, defaultOutput
 
 def getConfigType(generalDict):
 	if generalDict['type'] == 'ConsoleApplication':
 		return '1'
+	elif generalDict['type'] == 'WindowsApplication':
+		return '1'
 	elif generalDict['type'] == 'StaticLibrary':
 		return '4'
 	elif generalDict['type'] == 'DynamicLibrary':
 		return '2'
+	elif generalDict['type'] == 'MfcApplication':
+		return '1'
 	else:
 		raise SyntaxError( 'Unsupported type!' )
 
