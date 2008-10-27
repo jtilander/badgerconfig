@@ -1,2 +1,2 @@
+- Folder arrangement inside the solution explorer
 - C# support?
-- Support for bulk builds

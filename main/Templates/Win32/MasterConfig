@@ -1,11 +1,12 @@
+#
+# All the paths here are relative to this file. So if you have all your standard libraries somewhere, point them out
+# Also, it's very convinient to include the search directories for your solutions here.
+#
 [Project]
-Defines=AURORA_WIN32
-DebugDefines=AURORA_DEBUGG
-ReleaseDefines=AURORA_RELEASE
-ProfileDefines=AURORA_PROFILE
-FinalDefines=AURORA_FINAL;AURORA_RETAIL
-IncludePaths=../../../../Shared;../../../../External/Packages/freetype-2.1.10/include;../../../../External/Packages/Lua/include
-LibraryPaths=../../../../External/Packages/freetype-2.1.10/lib;../../../../External/Packages/Lua/lib
+Defines=MYWIN32
+FinalDefines=MYFINAL;MYRETAIL
+IncludePaths=../../../Shared;../../../External/include
+LibraryPaths=../../../External/lib
 
 [Solution]
-DependenciesPaths=../../../../Shared
+DependenciesPaths=../../../Shared;../../../External

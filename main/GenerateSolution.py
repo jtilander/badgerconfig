@@ -134,9 +134,15 @@ def main( argv ):
 	
 	projects = []
 	platform = argv[1]
-	
 	candidates = []
-	for root, dirs, files in os.walk('.'):
+	
+	
+	startdir = os.path.abspath('.')
+	if len(argv) > 2:
+		startdir = os.path.abspath(argv[2])
+		print 'Startdir = ' + startdir
+	
+	for root, dirs, files in os.walk(startdir):
 		for name in files:
 			if platform.lower() != os.path.basename(root).lower():
 				continue
