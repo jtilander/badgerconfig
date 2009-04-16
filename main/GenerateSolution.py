@@ -119,7 +119,9 @@ def main( argv ):
 			targetName = os.path.join( basePath, generalDict['name'] + '.sln' )
 			baseProject = os.path.splitext(targetName)[0] + '.vcproj'
 			dependencies = Engine.findDependencies( basePath, solutionDict['dependencies'], solutionDict['dependenciespaths'], generalDict['platform'], generateSearchName )
-			solution = writeSolution( basePath, [[baseProject] + dependencies], generalDict['platform'], Engine.CONFIGURATION_NAMES )
+			
+			platformName = generalDict['platform']
+			solution = writeSolution( basePath, [[baseProject] + dependencies], platformName, Engine.getConfigurations(platformName))
 
 			# All is now done, try to write the target file to disk...
 			Engine.writeConfigFile( targetName, solution )
@@ -135,7 +137,6 @@ def main( argv ):
 	projects = []
 	platform = argv[1]
 	candidates = []
-	
 	
 	startdir = os.path.abspath('.')
 	if len(argv) > 2:
@@ -168,7 +169,7 @@ def main( argv ):
 		platform = generalDict['platform']
 		projects.append( [baseProject] + dependencies )
 
-	solution = writeSolution( basePath, projects, platform, Engine.CONFIGURATION_NAMES )
+	solution = writeSolution( basePath, projects, platform, Engine.getConfigurations(platform) )
 	# All is now done, try to write the target file to disk...
 	Engine.writeConfigFile( targetSolutionName, solution )
 

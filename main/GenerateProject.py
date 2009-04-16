@@ -38,7 +38,7 @@ LINK_SECTION =  {
 				StackReserveSize="{{{STACKSIZE}}}"
 				StackCommitSize="{{{STACKSIZE}}}"
 				LargeAddressAware="2"
-				TargetMachine="1"
+				TargetMachine="%%%TARGETMACHINE%%%"
 				AllowIsolation="true"
 				Profile="false"
 			/>""",
@@ -64,7 +64,7 @@ LINK_SECTION =  {
 				StackReserveSize="{{{STACKSIZE}}}"
 				StackCommitSize="{{{STACKSIZE}}}"
 				LargeAddressAware="2"
-				TargetMachine="1"
+				TargetMachine="%%%TARGETMACHINE%%%"
 				AllowIsolation="true"
 				Profile="false"
 			/>""",
@@ -90,7 +90,7 @@ LINK_SECTION =  {
 				StackReserveSize="{{{STACKSIZE}}}"
 				StackCommitSize="{{{STACKSIZE}}}"
 				LargeAddressAware="2"
-				TargetMachine="1"
+				TargetMachine="%%%TARGETMACHINE%%%"
 				AllowIsolation="true"
 				Profile="false"
 			/>""",
@@ -116,7 +116,7 @@ LINK_SECTION =  {
 				StackReserveSize="{{{STACKSIZE}}}"
 				StackCommitSize="{{{STACKSIZE}}}"
 				LargeAddressAware="2"
-				TargetMachine="1"
+				TargetMachine="%%%TARGETMACHINE%%%"
 				AllowIsolation="true"
 				Profile="false"
 			/>"""
@@ -145,7 +145,7 @@ DLL_LINK_SECTION = {
 				StackReserveSize="{{{STACKSIZE}}}"
 				StackCommitSize="{{{STACKSIZE}}}"
 				LargeAddressAware="2"
-				TargetMachine="1"
+				TargetMachine="%%%TARGETMACHINE%%%"
 				AllowIsolation="true"
 				Profile="false"
 			/>""",
@@ -171,7 +171,7 @@ DLL_LINK_SECTION = {
 				StackReserveSize="{{{STACKSIZE}}}"
 				StackCommitSize="{{{STACKSIZE}}}"
 				LargeAddressAware="2"
-				TargetMachine="1"
+				TargetMachine="%%%TARGETMACHINE%%%"
 				AllowIsolation="true"
 				Profile="false"
 			/>""",
@@ -197,7 +197,7 @@ DLL_LINK_SECTION = {
 				StackReserveSize="{{{STACKSIZE}}}"
 				StackCommitSize="{{{STACKSIZE}}}"
 				LargeAddressAware="2"
-				TargetMachine="1"
+				TargetMachine="%%%TARGETMACHINE%%%"
 				AllowIsolation="true"
 				Profile="false"
 			/>""",
@@ -223,7 +223,7 @@ DLL_LINK_SECTION = {
 				StackReserveSize="{{{STACKSIZE}}}"
 				StackCommitSize="{{{STACKSIZE}}}"
 				LargeAddressAware="2"
-				TargetMachine="1"
+				TargetMachine="%%%TARGETMACHINE%%%"
 				AllowIsolation="true"
 				Profile="false"
 			/>"""
@@ -285,7 +285,7 @@ def xmlEnsureFileDirectory( element, folderItems, nodeFactory ):
 	element.appendChild( filter )
 	return xmlEnsureFileDirectory( filter, folderItems[1:], nodeFactory )
 	
-def xmlCreateSingleFileElement( document, baseDir, item ):
+def xmlCreateSingleFileElement( document, baseDir, item, platformName ):
 	nodeToAddTo = xmlEnsureFileDirectory( document.documentElement, item.folderPath, document.createElement )
 	node = document.createElement( 'File' )
 	nodeToAddTo.appendChild(node)
@@ -295,7 +295,7 @@ def xmlCreateSingleFileElement( document, baseDir, item ):
 	
 	try:
 		customrule = item.options['customrule']
-		for config in Engine.CONFIGURATION_NAMES:
+		for config in Engine.getConfigurations(platformName):
 			configNode = document.createElement( 'FileConfiguration' )
 			configNode.setAttribute( 'Name', config )
 			toolNode = document.createElement( 'Tool' )
@@ -319,7 +319,7 @@ def xmlCreateSingleFileElement( document, baseDir, item ):
 		haveCompilerOption = True
 	
 	if haveCompilerOption:
-		for config in Engine.CONFIGURATION_NAMES:
+		for config in Engine.getConfigurations(platformName):
 			configNode = document.createElement( 'FileConfiguration' )
 			configNode.setAttribute( 'Name', config )
 			toolNode = document.createElement( 'Tool' )
@@ -377,10 +377,10 @@ def xmlPrettyPrint( elementNode, indent ):
 		result += '%s</%s>\n' % (indent, elementNode.tagName)
 	return result
 
-def generateFiles( baseDir, sourceFiles ):
+def generateFiles( baseDir, sourceFiles, platformName):
 	document = xmlCreateNewDocument('Files')
 	for item in sourceFiles:
-		xmlCreateSingleFileElement( document, baseDir, item )
+		xmlCreateSingleFileElement( document, baseDir, item, platformName )
 	
 	result  = '\t<Files>\n'
 	for node in document.documentElement.childNodes:
@@ -420,16 +420,24 @@ def readTemplate(generalDict):
 	else:
 		raise SyntaxError( 'Unsupported type!' )
 	
+	platformName = generalDict['platform']
+	targetMachine = 1
+	if platformName.lower() == 'x64':
+		targetMachine = 17
+	
+	
 	configType = getConfigType(generalDict)
 	template = file(filename).read()
 	# Replace the link section
-	for config, platform in [x.split('|') for x in Engine.CONFIGURATION_NAMES]:
+	for config in Engine.CONFIGURATION_NAMES__NAKED:
 		linkSection = linkSectionTemplate[config.lower()].replace( '{{{CONFIG}}}', config.upper() )
 		template = template.replace( '{{{%s_LINK_SECTION}}}' % config.upper(), linkSection )
 	
 	template = template.replace( '{{{CONFIG_TYPE}}}', configType )
 	template = template.replace('{{{MFCMODE}}}', str(mfcMode))
 	template = template.replace(r'%%%SUBSYSTEM%%%', str(subSystem))
+	template = template.replace(r'%%%TARGETMACHINE%%%', str(targetMachine))
+	
 	
 	#TODO: This should be changed per platform... Preferably in the masterconfig.
 	stackSize = 8*1024*1024
@@ -475,6 +483,7 @@ def main( argv ):
 	try:
 		# Load the overall configuration from the file.
 		generalDict, projectDict, solutionDict = Engine.readConfiguration(configFileName)
+		platformName = generalDict['platform']
 		
 		# Determine the output product path.
 		targetName = os.path.join( basePath, generalDict['name'] + '.vcproj' )
@@ -482,7 +491,7 @@ def main( argv ):
 		# Transform the sourcefiles keyword to a .vcproj compatible xml section and replace it in the template
 		# before the general substiution engine can have it's turn
 		sourceFiles = FileItem.readSourceFiles( basePath, generalDict['sourcefiles'] )
-		filesSection = generateFiles( os.path.dirname(targetName), sourceFiles )
+		filesSection = generateFiles( os.path.dirname(targetName), sourceFiles, platformName )
 		template, defaultOutput = readTemplate(generalDict)
 		template = template.replace( r'%%%FILES%%%', filesSection )
 		

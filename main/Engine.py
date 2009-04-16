@@ -18,9 +18,15 @@ SOLUTION_SECTION_NAME = 'Solution'
 TEMPLATES_DIR = os.path.join( os.path.dirname(__file__), 'Templates')
 VALID_CONFIG_TYPES = ['ConsoleApplication', 'StaticLibrary', 'WindowsApplication',  'DynamicLibrary', 'MfcApplication']
 GENERAL_SECTION_ONLY_VARIABLES = ['type', 'sourcefiles']
-CONFIGURATION_NAMES = ['Debug|Win32', 'Release|Win32', 'Profile|Win32', 'Final|Win32']
+CONFIGURATION_NAMES__NAKED = ['Debug', 'Release', 'Profile', 'Final']
 CONFIGURATION_SUFFIX = '.bdgcfg'
 PATHVARIABLES = ['includespaths', 'librarypaths', 'dependenciespaths']
+
+def getConfigurations(platform):
+	# Fix the hardcoded aliases here...
+	if platform == 'Tool':
+		platform = 'Win32'
+	return [ '%s|%s' % (x, platform) for x in CONFIGURATION_NAMES__NAKED ]
 
 def mergeSeparatedStrings(a, b, separator):
 	assert( isinstance( a, type('') ) )

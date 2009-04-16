@@ -1,0 +1,12 @@
+#
+# All the paths here are relative to this file. So if you have all your standard libraries somewhere, point them out
+# Also, it's very convinient to include the search directories for your solutions here.
+#
+[Project]
+Defines=MYWIN32
+FinalDefines=MYFINAL;MYRETAIL
+IncludePaths=../../../Shared;../../../External/include
+LibraryPaths=../../../External/lib
+
+[Solution]
+DependenciesPaths=../../../Shared;../../../External
