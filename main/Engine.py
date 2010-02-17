@@ -95,7 +95,7 @@ def parseSection(baseDir, sectionName, defaultDict, parser, errorDict):
 			if key in result.keys():
 				if key.endswith('defines') or key.endswith('paths') or key.endswith('options') or key.endswith('libraries'):
 					old = result[ key ]
-					result[ key ] = old + value
+					result[ key ] = value + old
 				else:
 					result[ key ] = value
 			else:
@@ -150,10 +150,6 @@ def readConfiguration(configFileName):
 
 	solutionDict = loadDefaultDict(generalDict['platform'], SOLUTION_SECTION_NAME, copyDictWithExclusions(generalDict, GENERAL_SECTION_ONLY_VARIABLES))
 	solutionDict = parseSection(baseDir, SOLUTION_SECTION_NAME, solutionDict, parser, {})
-		
-	#print generalDict
-	#print projectDict
-	#print "Solution dict: " + str(solutionDict)
 	return generalDict, projectDict, solutionDict
 
 def getTemplatesDir( generalDict ):
@@ -214,6 +210,7 @@ def findFile( basePath, searchName, platform ):
 		
 		Returns a full path to the requested filename
 	"""
+	logging.debug( 'Trying to find file %s with platform %s under %s' % (searchName, platform, basePath))
 	candidates = []
 	for root, dirs, files in os.walk( basePath ):
 		for name in files:

@@ -300,7 +300,15 @@ def xmlCreateSingleFileElement( document, baseDir, item, platformName ):
 			configNode.setAttribute( 'Name', config )
 			toolNode = document.createElement( 'Tool' )
 			command, extension = customrule.split(',')
-			outputName = '$(InputDir)$(InputName)%s' % extension
+			if extension[0] == '.':
+				outputName = '$(InputDir)$(InputName)%s' % extension
+			else:
+				# It's a list of actual filenames
+				outputName = ''
+				names = extension.split(';')
+				for x in names:
+					outputName += '$(InputDir)%s;' % x
+				
 			toolNode.setAttribute( 'Name', 'VCCustomBuildTool' )
 			toolNode.setAttribute( 'Description', "%s %s" % (command, "$(InputFileName)") )
 			toolNode.setAttribute( 'CommandLine', '%s $(InputDir)$(InputFileName) %s' % (command, outputName) )
@@ -499,6 +507,9 @@ def main( argv ):
 			projectDict['outputfile'] = defaultOutput
 		if 'debuginformationformat' not in projectDict:
 			projectDict['debuginformationformat'] = '3'
+			projectDict['debuginformationformat_debug'] = '4'
+		else:
+			projectDict['debuginformationformat_debug'] = projectDict['debuginformationformat']
 		
 		projectDict['configurationtype'] = getConfigType(generalDict)
 		

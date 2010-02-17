@@ -1,0 +1,112 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+{{{PBXBUILDFILE}}}
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+{{{PBXCONTAINERITEMPROXY}}}
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+{{{PBXFILEREFERENCE}}}
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+{{{PBXFRAMEWORKSBUILDPHASE}}}
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		000000000000000000000002 /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+{{{GROUP_LIST}}}			
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+{{{GROUP_PRODUCTS}}}
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+{{{GROUP_RESOURCES}}}
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+{{{GROUP_FRAMEWORKS}}}			
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+{{{PBXGROUP_ITEMS}}}		
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+{{{PBXHEADERSBUILDPHASE}}}
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+{{{PBXNATIVETARGET}}}
+/* End PBXNativeTarget section */
+
+/* Begin PBXResourcesBuildPhase section */
+{{{PBXRESOURCESBUILDPHASE}}}
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+{{{PBXSOURCESBUILDPHASE}}}
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+{{{DEPENDENCIES_TABLE}}}
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+{{{XCBUILDCONFIGURATION}}}
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+{{{XCCONFIGURATIONLIST}}}
+/* End XCConfigurationList section */
+
+/* Begin PBXProject section */
+		000000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = {{{MAINCONFIGLISTUUID}}} /* Build configuration list for PBXProject "%%%NAME%%%" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				en,
+			);
+			mainGroup = 000000000000000000000002 /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+{{{PROJECTS_UUID_LIST}}}
+			);
+		};
+/* End PBXProject section */
+	};
+	rootObject = 000000000000000000000001 /* Project object */;
+}

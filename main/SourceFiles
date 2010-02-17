@@ -1,0 +1,19 @@
+#
+#
+#
+
+	Main.cpp
+	../../Foobar.cpp
+	Shaders.fx|CustomRule=GenerateBinary,.inl
+
+	#
+	# Make sure that we have duplicates...
+	#
+	Win32/Foobar.cpp
+	Xenon/Foobar.cpp
+
+	../../Win32/Foobar.cpp
+	../../AnotherLibrary/Xenon/WorldSystem.cpp
+	
+	PreCompiled.cpp|PreCompiled=1
+	ComplexInfile.cpp|LanguageExtensions=1|PreCompiled=0

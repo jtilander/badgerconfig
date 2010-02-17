@@ -10,9 +10,8 @@ import string
 import Engine
 import GenerateProject
 import GenerateSolution
-
-VERBOSE = False
-HELP = 'Usage: %s ' % sys.argv[0]
+import GenerateXcode
+import getopt
 
 def collectFiles( startDir, suffix ):
 	result = []
@@ -24,28 +23,78 @@ def collectFiles( startDir, suffix ):
 	return result
 
 def main( argv ):
-	configFiles = collectFiles(os.path.abspath('.'), Engine.CONFIGURATION_SUFFIX)
-	logging.info( 'Found %d configurations' % len(configFiles) )
-	logging.info( 'Generating project files...' )
-	for config in configFiles:
-		logging.info( '%s' % config )
-		GenerateProject.main([config])
+	"""
+		Goes recursivly down and generates all the solutions and vcproj for you.
+	"""
+	try:
+		opts, args = getopt.getopt( argv, 'vsb:')
+	except getopt.GetoptError:
+		print main.__doc__
+		return 1
 	
-	if 'sln' in argv:
-		logging.info( 'Generating solutions...' )
-		okSolutions = 0
-		for config in configFiles:
-			if 0 == GenerateSolution.main([config]):
-				okSolutions += 1
-				logging.info( '%s' % config )
-		logging.info( 'Generated %d solutions' % okSolutions )
-	else:
-		logging.info( 'Skipping sln generation, specify "sln" on the command line to generate solutions' )
-	return 0
+	basepath = os.path.abspath('.')
+	generateSLN = 0
+	generateXcode = 1
+	generateVcProj = 1
+	verbose = 0
+	for o,a in opts:
+		if '-v' == o:
+			verbose = 1
+		if '-s' == o:
+			generateSLN = 1
+		if '-b' == o:
+			basepath = os.path.abspath(a)
+			
+	if sys.platform == 'darwin':
+		generateSLN = 0
+		generateVcProj = 0
 
-if __name__ == '__main__':
-	if VERBOSE:
+	if verbose:
 		logging.basicConfig( level = logging.DEBUG, format = '%(levelname)s %(message)s' )
 	else:
 		logging.basicConfig( level = logging.INFO, format = '%(message)s' )
+	
+	logging.info( 'Searching %s' % basepath )
+	configFiles = collectFiles(basepath, Engine.CONFIGURATION_SUFFIX)
+	logging.info( 'Found %d configurations' % len(configFiles) )
+	logging.info( 'Generating project files...' )
+	
+	#
+	# This section is enterily for the visual studio projects...
+	#
+	solutionConfigs = []
+	for config in configFiles:
+		logging.info( '%s' % config )
+		
+		if generateVcProj:
+			try:
+				GenerateProject.main([config])
+				solutionConfigs.append(config)
+			except IOError,e:
+				#logging.info( 'Ignoring unsupported config %s (%s)' % (config, str(e)) )
+				logging.exception(e)
+				pass
+	
+		if generateXcode:
+			try:
+				GenerateXcode.processSingleSolution(config)
+			except IOError,e:
+				logging.exception(e)
+				pass
+	
+	if sys.platform != 'darwin':
+		if generateSLN:
+			logging.info( 'Generating solutions...' )
+			okSolutions = 0
+			for config in solutionConfigs:
+				if 0 == GenerateSolution.main([config]):
+					okSolutions += 1
+					logging.info( '%s' % config )
+			logging.info( 'Generated %d solutions' % okSolutions )
+		else:
+			logging.info( 'Skipping sln generation, specify "-s" on the command line to generate solutions' )
+	
+	return 0
+
+if __name__ == '__main__':
 	sys.exit( main( sys.argv[1:] ) )

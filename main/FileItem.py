@@ -17,13 +17,24 @@ class FileItem:
 		self.folderPath = []	# Stores the directory items leading up the file as given in the SourceFiles
 		self.outputBase = ''	# The filename that the object file get's generated into, e.g. if we have multiple Foobar.cpp we get this set to Foobar_001
 		self.options = {}
+		self.uuid = ''
+		self.refuuid = ''
 	
 	def __repr__(self):
 		return '%s -> %s | %s' % (self.fullpath, self.outputBase, self.options)
 
-	def basename(self):
+	def __name(self):
+		return os.path.basename(self.fullpath)
+	def __contextname(self):
+		return os.path.basename( os.path.dirname( os.path.dirname(self.fullpath ) ) ) + '/' + os.path.basename(os.path.dirname(self.fullpath))
+	def __basename(self):
 		return os.path.splitext(os.path.basename(self.fullpath))[0].lower()
-	basename = property(basename)
+	def __ext(self):
+		return os.path.splitext(self.fullpath)[1]
+	basename = property(__basename)
+	name = property(__name)
+	contextname = property(__contextname)
+	ext = property(__ext)
 
 def parseFromLine(basePath, line):
 	result = FileItem()
@@ -33,7 +44,7 @@ def parseFromLine(basePath, line):
 	del folderItems[-1]
 	result.folderPath = folderItems #string.join( folderItems, os.sep )
 	result.fullpath = PathHelp.normalize( os.path.join( basePath, pathFromConfig ) )
-	logging.debug( 'Folder path = %s' % (result.folderPath) )
+	#logging.debug( 'Folder path = %s' % (result.folderPath) )
 	if len(values)>1:
 		for pair in values[1].split('|'):
 			values = pair.split('=')
@@ -50,13 +61,17 @@ def parseSourceFiles( filename ):
 	base = os.path.dirname(filename)
 	result = []
 	
+	logging.debug('About to open %s' % filename )
 	lines = open(filename).readlines()
+	
 	lines = [string.strip(x) for x in lines]
 	lines = [x for x in lines if len(x)>0]
 	lines = [x for x in lines if x[0] != '#']
 	
+	logging.debug( '%s contained %d lines' % (filename, len(lines)) )
 	for line in lines:
 		result.append( parseFromLine( base, line ) )
+	logging.debug( 'Finished parsing items')
 	return result
 
 def sortOnFileName(a,b):
@@ -98,5 +113,9 @@ def readSourceFiles( baseDir, commaSeparatedSourceFilesList ):
 	result = []
 	for sourcefile in sourcefiles:
 		fullpath = os.path.join( baseDir, sourcefile.replace('/', os.sep ) )
+		fullpath = os.path.abspath(fullpath)
+		logging.debug('Now parsing %s' % fullpath )
 		result += parseSourceFiles( fullpath )
+	
+	logging.debug( 'Fixing unique references to items')
 	return fixupUnique(result)

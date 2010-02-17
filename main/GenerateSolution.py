@@ -115,8 +115,11 @@ def main( argv ):
 				logging.debug('No solution section found, bailing out of solution generation (offending file %s)' % configFileName)
 				return 1
 
+			
 			# Determine the output product path.
 			targetName = os.path.join( basePath, generalDict['name'] + '.sln' )
+			logging.info( 'Now generating solution %s' % targetName )
+			
 			baseProject = os.path.splitext(targetName)[0] + '.vcproj'
 			dependencies = Engine.findDependencies( basePath, solutionDict['dependencies'], solutionDict['dependenciespaths'], generalDict['platform'], generateSearchName )
 			
