@@ -1,1 +1,0 @@
-python ..\GenerateAll.py sln

@@ -1,6 +1,0 @@
-[General]
-Type = StaticLibrary
-SourceFiles = CoreFiles
-Platform=Win32
-
-[Project]

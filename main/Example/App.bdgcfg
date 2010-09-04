@@ -1,9 +1,0 @@
-[General]
-Type = ConsoleApplication
-SourceFiles = AppFiles
-Platform=Win32
-
-[Project]
-
-[Solution]
-Dependencies=Core
