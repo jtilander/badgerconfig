@@ -1,0 +1,10 @@
+[General]
+Type = ConsoleApplication
+SourceFiles = SourceFiles;../SourceFiles
+
+[Project]
+Defines=
+IncludePaths=../../..
+
+[Solution]
+Dependencies=Shared

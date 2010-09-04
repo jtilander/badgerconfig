@@ -3,10 +3,9 @@
 # Also, it's very convinient to include the search directories for your solutions here.
 #
 [Project]
-Defines=MYWIN32
-FinalDefines=MYFINAL;MYRETAIL
-IncludePaths=../../../Shared;../../../External/include
-LibraryPaths=../../../External/lib
+Defines=TARGET_WINDOWS;TARGET_WIN64
+IncludePaths=../../Example;../../Example/External/Include
+LibraryPaths=../../Example/External/Lib/x64
 
 [Solution]
-DependenciesPaths=../../../Shared;../../../External
+DependenciesPaths=../../Example

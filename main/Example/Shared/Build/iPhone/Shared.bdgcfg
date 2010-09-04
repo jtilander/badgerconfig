@@ -1,0 +1,9 @@
+[General]
+Type = StaticLibrary
+SourceFiles = SourceFiles;../SourceFiles
+
+[Project]
+Defines=ENABLE_WINDOWS
+IncludePaths=../../..
+
+

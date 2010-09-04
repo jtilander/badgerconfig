@@ -1,9 +1,13 @@
 [Project]
+
 # Very important for custom platform names! This ensures that we actually link in the correct
 # configuration in the .sln file!
 PlatformConfigAlias=Win32
-Defines=TOOL
+
+Defines=TARGET_TOOL;TARGET_WINDOWS
+IncludePaths=../../Example;../../Example/External/Include
+LibraryPaths=../../Example/External/Lib/Win32
 
 [Solution]
-DependenciesPaths=
+DependenciesPaths=../../Example
 

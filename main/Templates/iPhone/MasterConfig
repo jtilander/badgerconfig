@@ -1,11 +1,7 @@
 [Project]
-Defines=AURORA_XCODE;AURORA_GCC
-DebugDefines=AURORA_DEBUGG
-ReleaseDefines=AURORA_RELEASE
-ProfileDefines=AURORA_PROFILE
-FinalDefines=AURORA_FINAL;AURORA_RETAIL
-IncludePaths=../../../../Shared
+Defines=TARGET_IPHONE
+IncludePaths=../../Example
 LibraryPaths=
 
 [Solution]
-DependenciesPaths=../../../../Shared;../../../../External/Packages
+DependenciesPaths=../../Example

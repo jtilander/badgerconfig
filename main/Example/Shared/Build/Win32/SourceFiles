@@ -1,0 +1,13 @@
+#
+# Use the specific precompiled headers to this project
+# Also, place them in the Win32 Visual Studio folder, for ease of navigation
+#
+    PreCompiled.cpp|precompiled=1|folder=Win32
+    PreCompiled.h|folder=Win32
+    
+#
+# Here we place stuff that's specific to this platform.
+#
+
+    ../../Win32/Malloc.cpp
+    

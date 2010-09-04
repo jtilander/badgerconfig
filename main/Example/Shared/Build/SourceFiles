@@ -1,0 +1,18 @@
+
+#
+# Common headers and translation units
+#
+
+
+	../Types.h
+	../Assert.h
+	../Assert.cpp
+
+
+#
+# Platform abstraction headers
+#
+	../Malloc.h
+
+
+
