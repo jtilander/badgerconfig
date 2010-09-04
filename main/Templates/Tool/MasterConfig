@@ -1,0 +1,9 @@
+[Project]
+# Very important for custom platform names! This ensures that we actually link in the correct
+# configuration in the .sln file!
+PlatformConfigAlias=Win32
+Defines=TOOL
+
+[Solution]
+DependenciesPaths=
+

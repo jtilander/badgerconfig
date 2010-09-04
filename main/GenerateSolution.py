@@ -124,7 +124,7 @@ def main( argv ):
 			dependencies = Engine.findDependencies( basePath, solutionDict['dependencies'], solutionDict['dependenciespaths'], generalDict['platform'], generateSearchName )
 			
 			platformName = generalDict['platform']
-			solution = writeSolution( basePath, [[baseProject] + dependencies], platformName, Engine.getConfigurations(platformName))
+			solution = writeSolution( basePath, [[baseProject] + dependencies], platformName, Engine.getConfigurations(projectDict))
 
 			# All is now done, try to write the target file to disk...
 			Engine.writeConfigFile( targetName, solution )
@@ -172,7 +172,7 @@ def main( argv ):
 		platform = generalDict['platform']
 		projects.append( [baseProject] + dependencies )
 
-	solution = writeSolution( basePath, projects, platform, Engine.getConfigurations(platform) )
+	solution = writeSolution( basePath, projects, platform, Engine.getConfigurations(projectDict) )
 	# All is now done, try to write the target file to disk...
 	Engine.writeConfigFile( targetSolutionName, solution )
 

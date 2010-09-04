@@ -285,7 +285,7 @@ def xmlEnsureFileDirectory( element, folderItems, nodeFactory ):
 	element.appendChild( filter )
 	return xmlEnsureFileDirectory( filter, folderItems[1:], nodeFactory )
 	
-def xmlCreateSingleFileElement( document, baseDir, item, platformName ):
+def xmlCreateSingleFileElement( document, baseDir, item, projectDict ):
 	nodeToAddTo = xmlEnsureFileDirectory( document.documentElement, item.folderPath, document.createElement )
 	node = document.createElement( 'File' )
 	nodeToAddTo.appendChild(node)
@@ -295,7 +295,7 @@ def xmlCreateSingleFileElement( document, baseDir, item, platformName ):
 	
 	try:
 		customrule = item.options['customrule']
-		for config in Engine.getConfigurations(platformName):
+		for config in Engine.getConfigurations(projectDict):
 			configNode = document.createElement( 'FileConfiguration' )
 			configNode.setAttribute( 'Name', config )
 			toolNode = document.createElement( 'Tool' )
@@ -327,7 +327,7 @@ def xmlCreateSingleFileElement( document, baseDir, item, platformName ):
 		haveCompilerOption = True
 	
 	if haveCompilerOption:
-		for config in Engine.getConfigurations(platformName):
+		for config in Engine.getConfigurations(projectDict):
 			configNode = document.createElement( 'FileConfiguration' )
 			configNode.setAttribute( 'Name', config )
 			toolNode = document.createElement( 'Tool' )
@@ -385,10 +385,10 @@ def xmlPrettyPrint( elementNode, indent ):
 		result += '%s</%s>\n' % (indent, elementNode.tagName)
 	return result
 
-def generateFiles( baseDir, sourceFiles, platformName):
+def generateFiles( baseDir, sourceFiles, projectDict):
 	document = xmlCreateNewDocument('Files')
 	for item in sourceFiles:
-		xmlCreateSingleFileElement( document, baseDir, item, platformName )
+		xmlCreateSingleFileElement(document, baseDir, item, projectDict)
 	
 	result  = '\t<Files>\n'
 	for node in document.documentElement.childNodes:
@@ -499,7 +499,7 @@ def main( argv ):
 		# Transform the sourcefiles keyword to a .vcproj compatible xml section and replace it in the template
 		# before the general substiution engine can have it's turn
 		sourceFiles = FileItem.readSourceFiles( basePath, generalDict['sourcefiles'] )
-		filesSection = generateFiles( os.path.dirname(targetName), sourceFiles, platformName )
+		filesSection = generateFiles( os.path.dirname(targetName), sourceFiles, projectDict )
 		template, defaultOutput = readTemplate(generalDict)
 		template = template.replace( r'%%%FILES%%%', filesSection )
 		

@@ -1,4 +1,4 @@
-	#!/usr/bin/python
+#!/usr/bin/python
 #
 # Generates a visual studio compatible project from a template through the tinyconfig engine.
 #
@@ -42,6 +42,7 @@ FRAMEWORKPATHS = {
 	'openal.framework'			: 'System/Library/Frameworks/OpenAL.framework',
 	'audiotoolbox.framework'	: 'System/Library/Frameworks/AudioToolbox.framework',
 	'avfoundation.framework'	: 'System/Library/Frameworks/AVFoundation.framework',
+	'mediaplayer.framework'		: 'System/Library/Frameworks/MediaPlayer.framework',
 }
 
 FILETYPES = {
@@ -72,9 +73,12 @@ CONFIGURATION_TEMPLATES = {
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_FAST_MATH = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_THUMB_SUPPORT = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[arch=armv7]" = YES;
 				GCC_DEBUGGING_SYMBOLS = "full";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -89,6 +93,20 @@ CONFIGURATION_TEMPLATES = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"AURORA_IPHONE=1",
 					"AURORA_DEBUGG",
+					"_DEBUG=1",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv6]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_DEBUGG",
+					"AURORA_ARM6",
+					"_DEBUG=1",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv7]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_DEBUGG",
+					"AURORA_ARM7",
 					"_DEBUG=1",
 %(defines)s
 				);
@@ -118,10 +136,13 @@ CONFIGURATION_TEMPLATES = {
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_THUMB_SUPPORT = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[arch=armv7]" = YES;
 				GCC_DEBUGGING_SYMBOLS = "full";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -134,6 +155,18 @@ CONFIGURATION_TEMPLATES = {
 				WARNING_CFLAGS = "-Wall";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"AURORA_IPHONE=1",
+					"AURORA_RELEASE",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv6]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_ARM6",
+					"AURORA_RELEASE",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv7]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_ARM7",
 					"AURORA_RELEASE",
 %(defines)s
 				);
@@ -163,10 +196,13 @@ CONFIGURATION_TEMPLATES = {
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_THUMB_SUPPORT = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[arch=armv7]" = YES;
 				GCC_DEBUGGING_SYMBOLS = "full";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -177,6 +213,18 @@ CONFIGURATION_TEMPLATES = {
 				WARNING_CFLAGS = "-Wall";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"AURORA_IPHONE=1",
+					"AURORA_PROFILE",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv6]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_ARM6",
+					"AURORA_PROFILE",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv7]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_ARM7",
 					"AURORA_PROFILE",
 %(defines)s
 				);
@@ -207,10 +255,13 @@ CONFIGURATION_TEMPLATES = {
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_THUMB_SUPPORT = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[arch=armv7]" = YES;
 				GCC_DEBUGGING_SYMBOLS = "full";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -221,6 +272,18 @@ CONFIGURATION_TEMPLATES = {
 				WARNING_CFLAGS = "-Wall";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"AURORA_IPHONE=1",
+					"AURORA_FINAL",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv6]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_ARM6",
+					"AURORA_FINAL",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv7]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_ARM7",
 					"AURORA_FINAL",
 %(defines)s
 				);
@@ -250,10 +313,13 @@ CONFIGURATION_TEMPLATES = {
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_THUMB_SUPPORT = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				"GCC_THUMB_SUPPORT[arch=armv7]" = YES;
 				GCC_DEBUGGING_SYMBOLS = "full";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -263,6 +329,20 @@ CONFIGURATION_TEMPLATES = {
 				WARNING_CFLAGS = "-Wall";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"AURORA_IPHONE=1",
+					"AURORA_FINAL",
+					"AURORA_DISTRIBUTION",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv6]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_ARM6",
+					"AURORA_FINAL",
+					"AURORA_DISTRIBUTION",
+%(defines)s
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=armv7]" = (
+					"AURORA_IPHONE=1",
+					"AURORA_ARM7",
 					"AURORA_FINAL",
 					"AURORA_DISTRIBUTION",
 %(defines)s
@@ -300,7 +380,7 @@ SOLUTION_TEMPLATES = {
 				GCC_VERSION = 4.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphoneos3.2;
 			};
 			name = Debug;
 		};\n""",
@@ -317,7 +397,7 @@ SOLUTION_TEMPLATES = {
 				GCC_VERSION = 4.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphoneos3.2;
 			};
 			name = Release;
 		};\n""",
@@ -334,7 +414,7 @@ SOLUTION_TEMPLATES = {
 				GCC_VERSION = 4.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphoneos3.2;
 			};
 			name = Profile;
 		};\n""",
@@ -349,9 +429,9 @@ SOLUTION_TEMPLATES = {
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GCC_VERSION = 4.2;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphoneos3.2;
 			};
 			name = Final;
 		};\n""",
@@ -366,9 +446,9 @@ SOLUTION_TEMPLATES = {
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GCC_VERSION = 4.2;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphoneos3.2;
 			};
 			name = Distribution;
 		};\n""",
