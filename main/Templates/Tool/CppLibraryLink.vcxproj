@@ -1,0 +1,5 @@
+    <Lib>
+      <AdditionalLibraryDirectories>%%%LIBRARYPATHS%%%%%%{{{CONFIG}}}LIBRARYPATHS%%%%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%%%LIBRARIES%%%%%%{{{CONFIG}}}LIBRARIES%%%%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4006 /ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>

@@ -1,2 +1,10 @@
-- Folder arrangement inside the solution explorer
-- C# support?
+
+- VS 2010 support.
+    
+    http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
+    http://msdn.microsoft.com/en-us/library/dd293705.aspx
+    http://msdn.microsoft.com/en-us/library/dd293663.aspx
+    http://msdn.microsoft.com/en-us/library/dd293607.aspx
+
+
+

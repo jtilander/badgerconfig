@@ -1,0 +1,8 @@
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%%%LIBRARYPATHS%%%%%%{{{CONFIG}}}LIBRARYPATHS%%%%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%%%LIBRARIES%%%%%%{{{CONFIG}}}LIBRARIES%%%%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateMapFile>false</GenerateMapFile>
+      <StackReserveSize>4194304</StackReserveSize>
+    </Link>

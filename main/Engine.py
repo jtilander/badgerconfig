@@ -21,6 +21,7 @@ GENERAL_SECTION_ONLY_VARIABLES = ['type', 'sourcefiles']
 CONFIGURATION_NAMES__NAKED = ['Debug', 'Release', 'Profile', 'Final']
 CONFIGURATION_SUFFIX = '.bdgcfg'
 PATHVARIABLES = ['includespaths', 'librarypaths', 'dependenciespaths']
+DEFAULT_PLATFORMNAME = 'Win32'
 
 def getConfigurations(projectDict):
     platform = projectDict['platform']
@@ -136,6 +137,11 @@ def readConfiguration(configFileName):
     # Now populate the dictionaries
     generalDict = {}
     generalDict['platform'] = parentDir
+    generalDict['debugname']    = CONFIGURATION_NAMES__NAKED[0]
+    generalDict['releasename']  = CONFIGURATION_NAMES__NAKED[1]
+    generalDict['profilename']  = CONFIGURATION_NAMES__NAKED[2]
+    generalDict['finalname']    = CONFIGURATION_NAMES__NAKED[3]
+    generalDict['platformname'] = DEFAULT_PLATFORMNAME
     
     generalDict['name'] = fileName
     generalDict = parseSection(baseDir, GENERAL_SECTION_NAME, generalDict, parser, generalDict)

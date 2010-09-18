@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<Filter Include="Win32">
+			<UniqueIdentifier>{03c7b0ec-51b6-0f22-169c-8c9be617e735}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\Main.h" />
+		<ClInclude Include="PreCompiled.h">
+			<Filter>Win32</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\Win32\Boot.cpp">
+			<Filter>Win32</Filter>
+		</ClCompile>
+		<ClCompile Include="PreCompiled.cpp">
+			<Filter>Win32</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Main.cpp" />
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+</Project>
