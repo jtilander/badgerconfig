@@ -1,4 +1,0 @@
-    <Lib>
-      <AdditionalLibraryDirectories>%%%LIBRARYPATHS%%% %%%{{{CONFIG}}}LIBRARYPATHS%%%%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%%%LIBRARIES%%% %%%{{{CONFIG}}}LIBRARIES%%%%(AdditionalDependencies)</AdditionalDependencies>
-    </Lib>

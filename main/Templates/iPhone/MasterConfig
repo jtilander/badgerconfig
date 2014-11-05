@@ -1,7 +1,0 @@
-[Project]
-Defines=TARGET_IPHONE
-IncludePaths=../../Example
-LibraryPaths=
-
-[Solution]
-DependenciesPaths=../../Example
