@@ -1,13 +1,12 @@
 [Project]
-
-# Very important for custom platform names! This ensures that we actually link in the correct
-# configuration in the .sln file!
-PlatformConfigAlias=Win32
-
-Defines=TARGET_TOOL;TARGET_WINDOWS
-IncludePaths=../../Example;../../Example/External/Include
-LibraryPaths=../../Example/External/Lib/Win32
+PlatformName=x64
+Defines=BC_TOOL;MLIBRARY_DONTUSE_MFC_MANIFEST
+DebugDefines=BC_DEBUGG
+ReleaseDefines=BC_RELEASE
+ProfileDefines=BC_PROFILE
+FinalDefines=BC_FINAL;BC_RETAIL
+IncludePaths=../../Example/Include
+LibraryPaths=../../Example/Lib/$(Configuration)
 
 [Solution]
 DependenciesPaths=../../Example
-

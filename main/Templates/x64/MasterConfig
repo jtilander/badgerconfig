@@ -1,11 +1,12 @@
-#
-# All the paths here are relative to this file. So if you have all your standard libraries somewhere, point them out
-# Also, it's very convinient to include the search directories for your solutions here.
-#
 [Project]
-Defines=TARGET_WINDOWS;TARGET_WIN64
-IncludePaths=../../Example;../../Example/External/Include
-LibraryPaths=../../Example/External/Lib/x64
+PlatformName=x64
+Defines=BC_WIN32;BC_X64
+DebugDefines=BC_DEBUGG
+ReleaseDefines=BC_RELEASE
+ProfileDefines=BC_PROFILE
+FinalDefines=BC_FINAL;BC_RETAIL
+IncludePaths=../../Example/Include
+LibraryPaths=../../Example/Lib/$(Configuration)
 
 [Solution]
 DependenciesPaths=../../Example

@@ -22,32 +22,39 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     FINALLINKSECTION   - depending upon the link target
     FILESECTION        - expands into the files from SourceFiles
 
+Warnings disabled permanently:
+
+  4996 - This function or variable may be unsafe. Consider using strcat_s instead.
+  4127 - conditional expression is constant
+  4512 - assignment operator could not be generated
+  4291 - no matching new operator
+  4800 - forcing integer to bool (performance warning)
+
 -->
 <!-- ======================================================================================================================== -->
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
+    <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
+    <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Profile|Win32">
+    <ProjectConfiguration Include="Profile|x64">
       <Configuration>Profile</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Final|Win32">
+    <ProjectConfiguration Include="Final|x64">
       <Configuration>Final</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   
   <!-- ======================================================================================================================== -->
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{31F9F1AE-5C0F-2611-320C-45666C3CA44E}</ProjectGuid>
+    <ProjectGuid>{C746E0A4-0E07-7DD6-665D-F6F98A679AA0}</ProjectGuid>
   </PropertyGroup>
   
   <!-- ======================================================================================================================== -->
@@ -55,7 +62,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     Let's define the default configurations and their global properties
   -->
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
@@ -63,8 +70,9 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     <UseOfAtl>false</UseOfAtl>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>    
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
@@ -72,8 +80,9 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     <UseOfAtl>false</UseOfAtl>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>    
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
@@ -81,8 +90,9 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     <UseOfAtl>false</UseOfAtl>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>    
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
@@ -90,6 +100,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     <UseOfAtl>false</UseOfAtl>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>    
   </PropertyGroup>
 
   <!-- ======================================================================================================================== -->
@@ -99,57 +110,63 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   
   
   <!-- ======================================================================================================================== -->
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)$(Configuration)_VS2010\</OutDir>
-    <IntDir>$(ProjectDir)$(Configuration)_VS2010\</IntDir>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</OutDir>
+    <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(ProjectDir)$(Configuration)_VS2010\</OutDir>
-    <IntDir>$(ProjectDir)$(Configuration)_VS2010\</IntDir>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</OutDir>
+    <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
-    <OutDir>$(ProjectDir)$(Configuration)_VS2010\</OutDir>
-    <IntDir>$(ProjectDir)$(Configuration)_VS2010\</IntDir>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
+    <OutDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</OutDir>
+    <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
-    <OutDir>$(ProjectDir)$(Configuration)_VS2010\</OutDir>
-    <IntDir>$(ProjectDir)$(Configuration)_VS2010\</IntDir>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
+    <OutDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</OutDir>
+    <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
 		<PrecompiledHeader>Use</PrecompiledHeader>
 		<PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
 
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;ENABLE_WINDOWS;MYWIN32;TARGET_WINDOWS;TARGET_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>;../../..;../../../External/Include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;ENABLE_WINDOWS;BC_WIN32;BC_X64;BC_DEBUGG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WindowsSdkDir)\include;../../..;../../../Include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>false</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -162,7 +179,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -171,15 +188,18 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
+      <OpenMPSupport>false</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>../../../External/Lib/Win32 %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../Lib/$(Configuration)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006 /ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
 
     <PostBuildEvent>
@@ -187,15 +207,15 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     </PostBuildEvent>
   </ItemDefinitionGroup>
 
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
 		<PrecompiledHeader>Use</PrecompiledHeader>
 		<PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
 
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;ENABLE_WINDOWS;MYWIN32;TARGET_WINDOWS;TARGET_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>;../../..;../../../External/Include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;ENABLE_WINDOWS;BC_WIN32;BC_X64;BC_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WindowsSdkDir)\include;../../..;../../../Include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -209,7 +229,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -218,15 +238,18 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
+      <OpenMPSupport>false</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>../../../External/Lib/Win32 %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../Lib/$(Configuration)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006 /ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
 
     <PostBuildEvent>
@@ -234,15 +257,15 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     </PostBuildEvent>
   </ItemDefinitionGroup>
 
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
     <ClCompile>
 		<PrecompiledHeader>Use</PrecompiledHeader>
 		<PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
 
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;ENABLE_WINDOWS;MYWIN32;TARGET_WINDOWS;TARGET_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>;../../..;../../../External/Include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;ENABLE_WINDOWS;BC_WIN32;BC_X64;BC_PROFILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WindowsSdkDir)\include;../../..;../../../Include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -256,7 +279,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -265,15 +288,19 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;28251;</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
+      <EnablePREfast>true</EnablePREfast>
+      <OpenMPSupport>false</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>../../../External/Lib/Win32 %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../Lib/$(Configuration)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006 /ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
 
     <PostBuildEvent>
@@ -281,15 +308,15 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     </PostBuildEvent>
   </ItemDefinitionGroup>
 
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
     <ClCompile>
 		<PrecompiledHeader>Use</PrecompiledHeader>
 		<PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
 
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;ENABLE_WINDOWS;MYWIN32;TARGET_WINDOWS;TARGET_WIN32;MYFINAL;MYRETAIL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>;../../..;../../../External/Include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;ENABLE_WINDOWS;BC_WIN32;BC_X64;BC_FINAL;BC_RETAIL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WindowsSdkDir)\include;../../..;../../../Include%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -303,7 +330,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -312,15 +339,18 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
+      <OpenMPSupport>false</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>../../../External/Lib/Win32 %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../Lib/$(Configuration)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006 /ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)\$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
 
     <PostBuildEvent>
@@ -331,23 +361,30 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
 <!-- ======================================================================================================================== -->
 <!-- BadgerConfig will insert the correct list of files here... -->
 	<ItemGroup>
-		<ClInclude Include="PreCompiled.h">
-		</ClInclude>
-		<ClInclude Include="..\..\Types.h">
-		</ClInclude>
 		<ClInclude Include="..\..\Assert.h">
 		</ClInclude>
 		<ClInclude Include="..\..\Malloc.h">
 		</ClInclude>
+		<ClInclude Include="PreCompiled.h">
+		</ClInclude>
+		<ClInclude Include="..\..\Types.h">
+		</ClInclude>
 	</ItemGroup>
 	<ItemGroup>
+		<ClCompile Include="..\..\Assert.cpp">
+		</ClCompile>
 		<ClCompile Include="..\..\Win32\Malloc.cpp">
 		</ClCompile>
 		<ClCompile Include="PreCompiled.cpp">
 			<PrecompiledHeader>Create</PrecompiledHeader>
+			<AdditionalOptions>/Ylsm_Shared_library_pch %(AdditionalOptions)</AdditionalOptions>
 		</ClCompile>
-		<ClCompile Include="..\..\Assert.cpp">
-		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+	<ItemGroup>
 	</ItemGroup>
 	<ItemGroup>
 	</ItemGroup>

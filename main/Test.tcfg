@@ -5,6 +5,5 @@ Type = ConsoleApplication
 SourceFiles = SourceFiles
 
 [Project]
-Uuid=a6188079-7fdc-43d6-83c9-7686e3cc4a51
 
 [Solution]

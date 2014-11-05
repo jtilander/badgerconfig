@@ -6,12 +6,9 @@
 import logging
 import os
 import sys
-import string
 import Engine
 import GenerateProject
-import GenerateProject2010
 import GenerateSolution
-import GenerateXcode
 import getopt
 
 def collectFiles( startDir, suffix ):
@@ -35,7 +32,6 @@ def main( argv ):
     
     basepath = os.path.abspath('.')
     generateSLN = 0
-    generateXcode = 1
     generateVcProj = 1
     verbose = 0
     for o,a in opts:
@@ -45,10 +41,6 @@ def main( argv ):
             generateSLN = 1
         if '-b' == o:
             basepath = os.path.abspath(a)
-            
-    if sys.platform == 'darwin':
-        generateSLN = 0
-        generateVcProj = 0
 
     if verbose:
         logging.basicConfig( level = logging.DEBUG, format = '%(levelname)s %(message)s' )
@@ -65,36 +57,28 @@ def main( argv ):
     #
     solutionConfigs = []
     for config in configFiles:
-        logging.info( '%s' % config )
+        logging.debug( '%s' % config )
         
         if generateVcProj:
             try:
                 GenerateProject.main([config])
-                GenerateProject2010.main([config])
                 solutionConfigs.append(config)
             except IOError,e:
                 #logging.info( 'Ignoring unsupported config %s (%s)' % (config, str(e)) )
                 logging.exception(e)
                 pass
     
-        if generateXcode:
-            try:
-                GenerateXcode.processSingleSolution(config)
-            except IOError,e:
-                logging.exception(e)
-                pass
     
-    if sys.platform != 'darwin':
-        if generateSLN:
-            logging.info( 'Generating solutions...' )
-            okSolutions = 0
-            for config in solutionConfigs:
-                if 0 == GenerateSolution.main([config]):
-                    okSolutions += 1
-                    logging.info( '%s' % config )
-            logging.info( 'Generated %d solutions' % okSolutions )
-        else:
-            logging.info( 'Skipping sln generation, specify "-s" on the command line to generate solutions' )
+    if generateSLN:
+        logging.info( 'Generating solutions...' )
+        okSolutions = 0
+        for config in solutionConfigs:
+            if 0 == GenerateSolution.main([config]):
+                okSolutions += 1
+                logging.debug( '%s' % config )
+        logging.info( 'Generated %d solutions' % okSolutions )
+    else:
+        logging.info( 'Skipping sln generation, specify "-s" on the command line to generate solutions' )
     
     return 0
 

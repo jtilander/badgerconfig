@@ -2,25 +2,29 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<ItemGroup>
 		<Filter Include="Win32">
-			<UniqueIdentifier>{1a334f37-0caf-917a-e7af-1e3e3a984792}</UniqueIdentifier>
+			<UniqueIdentifier>{12865e5d-0164-a436-478c-589134f41c4f}</UniqueIdentifier>
 		</Filter>
 	</ItemGroup>
 	<ItemGroup>
+		<ClInclude Include="..\..\Main.h" />
 		<ClInclude Include="PreCompiled.h">
 			<Filter>Win32</Filter>
 		</ClInclude>
-		<ClInclude Include="..\..\Types.h" />
-		<ClInclude Include="..\..\Assert.h" />
-		<ClInclude Include="..\..\Malloc.h" />
 	</ItemGroup>
 	<ItemGroup>
+		<ClCompile Include="..\..\Win32\Boot.cpp">
+			<Filter>Win32</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Main.cpp" />
 		<ClCompile Include="PreCompiled.cpp">
 			<Filter>Win32</Filter>
 		</ClCompile>
-		<ClCompile Include="..\..\Win32\Malloc.cpp">
-			<Filter>Win32</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Assert.cpp" />
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+	<ItemGroup>
 	</ItemGroup>
 	<ItemGroup>
 	</ItemGroup>

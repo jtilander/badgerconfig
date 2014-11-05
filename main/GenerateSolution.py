@@ -7,16 +7,13 @@ import logging
 import os
 import sys
 import string
-import ConfigParser
 import Engine
-import FileItem
 import PathHelp
 
-VERBOSE = True
+VERBOSE = False
 HELP = 'Usage: %s <configfile> or <solutionfile> <platform>' % sys.argv[0]
 
-VS2005HEADER = "Microsoft Visual Studio Solution File, Format Version 9.00\n# Visual Studio 2005"
-VS2010HEADER = "Microsoft Visual Studio Solution File, Format Version 11.00\n# Visual Studio 2010"
+VS2013HEADER = "Microsoft Visual Studio Solution File, Format Version 12.00\n# Visual Studio 2013\nVisualStudioVersion = 12.0.21005.1\nMinimumVisualStudioVersion = 10.0.40219.1"
 
 def getProjectInfo(configPath):
     configPath = os.path.splitext(configPath)[0] + '.bdgcfg'
@@ -30,6 +27,8 @@ def writeSolution( basePath, projectsList, platform, configurations ):
     # Generate the map of dependencies and the list of all the projects
     logging.debug( "Generating the dependencies map" )
     for lol in projectsList:
+        if len(lol) == 0:
+            continue
         head = lol[0]
         deps = lol[1:]
         project2dependency[ head ] = deps
@@ -66,8 +65,9 @@ def writeSolution( basePath, projectsList, platform, configurations ):
     # This section declares the live configurations in the solution
     platformConfigSection = ''
     for config in configurations:
-        configName = config.split('|')[0] + '|' + platform
-        platformConfigSection += '\t\t%s = %s\n' % (configName, configName)
+        configName1 = config.split('|')[0] + '|' + platform
+        configName2 = config.split('|')[0] + '|' + platform
+        platformConfigSection += '\t\t%s = %s\n' % (configName1, configName2)
 
     # This section defines the mappings between the configuration in the solution and the 
     # ones in the projects
@@ -94,7 +94,7 @@ Global
 EndGlobal
 """ % (projectSection.rstrip(), platformConfigSection.rstrip(), configurationSection.rstrip())
 
-def writeSingleSolution(configFileName, projectExt, solutionExt, solutionHeader):
+def writeSingleSolution(configFileName, projectExt, solutionExt, solutionHeader, is2010):
     basePath = os.path.dirname(configFileName)
     try:
         # Load the overall configuration from the .tcfg file.
@@ -102,16 +102,28 @@ def writeSingleSolution(configFileName, projectExt, solutionExt, solutionHeader)
         if len(solutionDict) == 0:
             logging.debug('No solution section found, bailing out of solution generation (offending file %s)' % configFileName)
             return 1
-        
+
+        if 'dependencies' not in solutionDict:
+            solutionDict['dependencies'] = ''
+        if 'dependenciespaths' not in solutionDict:
+            solutionDict['dependenciespaths'] = ''
+
+        if 'additionalprojects' not in solutionDict:
+            solutionDict['additionalprojects'] = ''
+        if 'additionalprojectspaths' not in solutionDict:
+            solutionDict['additionalprojectspaths'] = ''
+
         # Determine the output product path.
         targetName = os.path.join( basePath, generalDict['name'] + solutionExt )
-        logging.info( 'Now generating solution %s' % targetName )
+        logging.debug( 'Now generating solution %s' % targetName )
         
         baseProject = os.path.splitext(configFileName)[0] + projectExt
         dependencies = Engine.findDependencies( basePath, solutionDict['dependencies'], solutionDict['dependenciespaths'], generalDict['platform'], lambda x: x+'.bdgcfg')
+
+        additionalProjects = Engine.findDependencies( basePath, solutionDict['additionalprojects'], solutionDict['additionalprojectspaths'], generalDict['platform'], lambda x: x+'.bdgcfg')
         
-        platformName = generalDict['platform']
-        solution = writeSolution( basePath, [[baseProject] + [os.path.splitext(x)[0] + projectExt for x in dependencies]], platformName, Engine.getConfigurations(projectDict))
+        platform = projectDict['platform']
+        solution = writeSolution( basePath, [[baseProject] + [os.path.splitext(x)[0] + projectExt for x in dependencies]] + [[os.path.splitext(x)[0] + projectExt for x in additionalProjects]], platform, Engine.getConfigurations(projectDict))
 
         # All is now done, try to write the target file to disk...
         Engine.writeConfigFile( targetName, solutionHeader + '\n' + solution )
@@ -120,7 +132,7 @@ def writeSingleSolution(configFileName, projectExt, solutionExt, solutionHeader)
         return 1
     return 0
 
-def writeMultiSolution(targetSolutionName, candidates, projectExt, solutionHeader):
+def writeMultiSolution(targetSolutionName, candidates, projectExt, solutionHeader, is2010):
     basePath = os.path.dirname(targetSolutionName)
     projects = []
     for item in map(os.path.abspath, candidates):
@@ -136,7 +148,7 @@ def writeMultiSolution(targetSolutionName, candidates, projectExt, solutionHeade
             dependencies = []
         
         # HACK: The platform will just be the last one referenced.
-        platform = generalDict['platform']
+        platform = projectDict['platform']
         projects.append( [baseProject] + [os.path.splitext(x)[0] + projectExt for x in dependencies] )
 
     solution = writeSolution( basePath, projects, platform, Engine.getConfigurations(projectDict) )
@@ -151,8 +163,7 @@ def main( argv ):
     if len(argv) == 1:
         # Single configuration mode. Deduce the 
         configFileName = os.path.abspath(argv[0])
-        writeSingleSolution(configFileName, '.vcproj', '.sln', VS2005HEADER)
-        writeSingleSolution(configFileName, '.vcxproj', '_VS2010.sln', VS2010HEADER)
+        writeSingleSolution(configFileName, '.vcxproj', '.sln', VS2013HEADER, 1)
         return 0
     
     # Multiple project into one single solution mode.
@@ -174,8 +185,7 @@ def main( argv ):
             fullname = os.path.join(root, name)
             candidates.append(fullname)
     
-    writeMultiSolution(targetSolutionName + '.sln', candidates, '.vcproj', VS2005HEADER)
-    writeMultiSolution(targetSolutionName + '_VS2010.sln', candidates, '.vcxproj', VS2010HEADER)
+    writeMultiSolution(targetSolutionName + '.sln', candidates, '.vcxproj', VS2013HEADER, 1)
     return 0
     
 

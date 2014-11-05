@@ -22,10 +22,17 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     FINALLINKSECTION   - depending upon the link target
     FILESECTION        - expands into the files from SourceFiles
 
+Warnings disabled permanently:
+
+  4996 - This function or variable may be unsafe. Consider using strcat_s instead.
+  4127 - conditional expression is constant
+  4512 - assignment operator could not be generated
+  4291 - no matching new operator
+  4800 - forcing integer to bool (performance warning)
+
 -->
 <!-- ======================================================================================================================== -->
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="%%%DEBUGNAME%%%|%%%PLATFORMNAME%%%">
       <Configuration>%%%DEBUGNAME%%%</Configuration>
@@ -63,6 +70,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     <UseOfAtl>false</UseOfAtl>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>    
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%RELEASENAME%%%|%%%PLATFORMNAME%%%'" Label="Configuration">
     <ConfigurationType>%%%CONFIGTYPE%%%</ConfigurationType>
@@ -72,6 +80,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     <UseOfAtl>false</UseOfAtl>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>    
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%PROFILENAME%%%|%%%PLATFORMNAME%%%'" Label="Configuration">
     <ConfigurationType>%%%CONFIGTYPE%%%</ConfigurationType>
@@ -81,6 +90,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     <UseOfAtl>false</UseOfAtl>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>    
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%FINALNAME%%%|%%%PLATFORMNAME%%%'" Label="Configuration">
     <ConfigurationType>%%%CONFIGTYPE%%%</ConfigurationType>
@@ -90,6 +100,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
     <UseOfAtl>false</UseOfAtl>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>    
   </PropertyGroup>
 
   <!-- ======================================================================================================================== -->
@@ -116,24 +127,34 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
   <!-- ======================================================================================================================== -->
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%DEBUGNAME%%%|%%%PLATFORMNAME%%%'">
-    <OutDir>$(ProjectDir)$(Configuration)_VS2010\</OutDir>
-    <IntDir>$(ProjectDir)$(Configuration)_VS2010\</IntDir>
+    <OutDir>%%%DEBUGOUTPUTFOLDER%%%</OutDir>
+    <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>%%%DEBUGOUTPUTFILENAME%%%</TargetName>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%RELEASENAME%%%|%%%PLATFORMNAME%%%'">
-    <OutDir>$(ProjectDir)$(Configuration)_VS2010\</OutDir>
-    <IntDir>$(ProjectDir)$(Configuration)_VS2010\</IntDir>
+    <OutDir>%%%RELEASEOUTPUTFOLDER%%%</OutDir>
+    <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>%%%RELEASEOUTPUTFILENAME%%%</TargetName>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%PROFILENAME%%%|%%%PLATFORMNAME%%%'">
-    <OutDir>$(ProjectDir)$(Configuration)_VS2010\</OutDir>
-    <IntDir>$(ProjectDir)$(Configuration)_VS2010\</IntDir>
+    <OutDir>%%%PROFILEOUTPUTFOLDER%%%</OutDir>
+    <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>%%%PROFILEOUTPUTFILENAME%%%</TargetName>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%FINALNAME%%%|%%%PLATFORMNAME%%%'">
-    <OutDir>$(ProjectDir)$(Configuration)_VS2010\</OutDir>
-    <IntDir>$(ProjectDir)$(Configuration)_VS2010\</IntDir>
+    <OutDir>%%%FINALOUTPUTFOLDER%%%</OutDir>
+    <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>%%%FINALOUTPUTFILENAME%%%</TargetName>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='%%%DEBUGNAME%%%|%%%PLATFORMNAME%%%'">
@@ -142,8 +163,8 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE%%%DEFINES%%%%%%DEBUGDEFINES%%%;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%%%INCLUDEPATHS%%%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(WindowsSdkDir)\include%%%INCLUDEPATHS%%%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>false</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -156,7 +177,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -165,10 +186,12 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
+      <OpenMPSupport>%%%OPENMP%%%</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
 {{{DEBUGLINKSECTION}}}
     <PostBuildEvent>
@@ -182,7 +205,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE%%%DEFINES%%%%%%RELEASEDEFINES%%%;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%%%INCLUDEPATHS%%%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WindowsSdkDir)\include%%%INCLUDEPATHS%%%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -196,7 +219,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -205,10 +228,12 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
+      <OpenMPSupport>%%%OPENMP%%%</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
 {{{RELEASELINKSECTION}}}
     <PostBuildEvent>
@@ -222,7 +247,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE%%%DEFINES%%%%%%PROFILEDEFINES%%%;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%%%INCLUDEPATHS%%%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WindowsSdkDir)\include%%%INCLUDEPATHS%%%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -236,7 +261,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -245,10 +270,13 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;28251;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
+      <EnablePREfast>true</EnablePREfast>
+      <OpenMPSupport>%%%OPENMP%%%</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
 {{{PROFILELINKSECTION}}}
     <PostBuildEvent>
@@ -262,7 +290,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE%%%DEFINES%%%%%%FINALDEFINES%%%;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%%%INCLUDEPATHS%%%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WindowsSdkDir)\include%%%INCLUDEPATHS%%%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -276,7 +304,7 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -285,10 +313,12 @@ Internal Variables (will be replaced by the engine) in the form of {{{KEY}}}:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
+      <OpenMPSupport>%%%OPENMP%%%</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
 {{{FINALLINKSECTION}}}
     <PostBuildEvent>

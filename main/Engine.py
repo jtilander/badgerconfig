@@ -25,8 +25,8 @@ DEFAULT_PLATFORMNAME = 'Win32'
 
 def getConfigurations(projectDict):
     platform = projectDict['platform']
-    if 'platformconfigalias' in projectDict.keys():
-        platform = projectDict['platformconfigalias']
+    if 'platformname' in projectDict.keys():
+        platform = projectDict['platformname']
     return [ '%s|%s' % (x, platform) for x in CONFIGURATION_NAMES__NAKED ]
 
 def mergeSeparatedStrings(a, b, separator):
@@ -46,6 +46,9 @@ def convertToRelativeList( baseDir, separatedList, separator ):
     for item in separatedList.split( separator ):
         if len(item) == 0:
             continue
+        if item[0] in ['$', '%%']: # If it's an environment variable -- then assume it's going to be an absolute path.
+            result.append(item)
+            continue
         result.append( PathHelp.relative( baseDir, item ).replace(os.sep,'/') )
     return string.join(result,separator)
 
@@ -53,6 +56,9 @@ def convertToAbsolutePathList( baseDir, separatedList, separator ):
     result = []
     for item in separatedList.split( separator ):
         if len(item) == 0:
+            continue
+        if item[0] in ['$', '%%']: # If it's an environment variable -- then assume it's going to be an absolute path.
+            result.append(item)
             continue
         path = PathHelp.normalize( os.path.join( baseDir, item.replace('/', os.sep) )  )
         result.append( path )
@@ -72,7 +78,7 @@ def copyDictWithExclusions( general, excludedKeys ):
     """
     assert( isinstance(general, type({})) )
     assert( isinstance(excludedKeys, type([])) )
-    
+
     result = {}
     for name, value in general.iteritems():
         if name in excludedKeys:
@@ -93,8 +99,10 @@ def parseSection(baseDir, sectionName, defaultDict, parser, errorDict):
                 value = ensureLeadingSeparator(value,';')
             if key.endswith('defines'):
                 value = ensureLeadingSeparator(value,';')
+            if key.endswith('disabledvcwarnings'):
+                value = ensureLeadingSeparator(value,';')
             if key in result.keys():
-                if key.endswith('defines') or key.endswith('paths') or key.endswith('options') or key.endswith('libraries'):
+                if key.endswith('defines') or key.endswith('paths') or key.endswith('options') or key.endswith('libraries') or key.endswith('disabledvcwarnings'):
                     old = result[ key ]
                     result[ key ] = value + old
                 else:
@@ -126,14 +134,14 @@ def readConfiguration(configFileName):
     """
     assert( isinstance( configFileName, type('') ) )
     configFile = open(configFileName)
-    
+
     # Figure out the defaults
     baseDir = os.path.dirname(configFileName)
     parentDir = os.path.basename( os.path.dirname(configFileName) )
     fileName = os.path.splitext( os.path.basename(configFileName) )[0]
     parser = ConfigParser.ConfigParser()
     parser.read(configFileName)
-    
+
     # Now populate the dictionaries
     generalDict = {}
     generalDict['platform'] = parentDir
@@ -141,22 +149,24 @@ def readConfiguration(configFileName):
     generalDict['releasename']  = CONFIGURATION_NAMES__NAKED[1]
     generalDict['profilename']  = CONFIGURATION_NAMES__NAKED[2]
     generalDict['finalname']    = CONFIGURATION_NAMES__NAKED[3]
-    generalDict['platformname'] = DEFAULT_PLATFORMNAME
-    
     generalDict['name'] = fileName
     generalDict = parseSection(baseDir, GENERAL_SECTION_NAME, generalDict, parser, generalDict)
-    
+
     if 'type' not in generalDict:
         raise SyntaxError('Must have a type key in the general section, choose from %s (offending file was %s)' % (str(VALID_CONFIG_TYPES), configFileName) )
-    
+
     projectDict = loadDefaultDict(generalDict['platform'], PROJECT_SECTION_NAME, copyDictWithExclusions(generalDict, GENERAL_SECTION_ONLY_VARIABLES))
     projectDict = parseSection(baseDir, PROJECT_SECTION_NAME, projectDict, parser, projectDict)
-    
+
     if 'uuid' not in projectDict:
         projectDict['uuid'] = generateUUID(fileName, parentDir)
 
     solutionDict = loadDefaultDict(generalDict['platform'], SOLUTION_SECTION_NAME, copyDictWithExclusions(generalDict, GENERAL_SECTION_ONLY_VARIABLES))
     solutionDict = parseSection(baseDir, SOLUTION_SECTION_NAME, solutionDict, parser, {})
+
+    if 'platformname' not in projectDict:
+        projectDict['platformname'] = projectDict['platform']
+
     return generalDict, projectDict, solutionDict
 
 def getTemplatesDir( generalDict ):
@@ -168,16 +178,16 @@ def getTemplatesDir( generalDict ):
 
 def replaceKeywords( basePath, template, projectDict, fixupRules ):
     """
-        Steps through the template and finds all the instances with %%%KEYWORD%%% and for each instance runs 
-        a replace with a new value calculated from the project dictionary and run through any rules given in the 
+        Steps through the template and finds all the instances with %%%KEYWORD%%% and for each instance runs
+        a replace with a new value calculated from the project dictionary and run through any rules given in the
         fixupRules dictionary (which should contain a list of functions that can transform the entry from first to last entry in a chain).
-        
+
         Returns the new replaced string.
     """
     assert( isinstance( template, type('') ) )
     assert( isinstance( projectDict, type({}) ) )
     assert( isinstance( fixupRules, type({}) ) )
-    
+
     pattern = re.compile( r'\%\%\%([^\%]+)\%\%\%' )
     keywords = [ x.group(1).lower() for x in re.finditer( pattern, template ) ]
 
@@ -185,7 +195,7 @@ def replaceKeywords( basePath, template, projectDict, fixupRules ):
         try:
             value = projectDict[keyword]
             if keyword.endswith('path'):
-                value = PathHelp.relative( basePath, value ).replace(os.sep,'/') 
+                value = PathHelp.relative( basePath, value ).replace(os.sep,'/')
             if keyword.endswith('paths'):
                 value = convertToRelativeList( basePath, value, ';' )
             try:
@@ -200,21 +210,67 @@ def replaceKeywords( basePath, template, projectDict, fixupRules ):
         template = template.replace( '%%%%%%%s%%%%%%' % keyword.upper(), value )
     return template
 
+
+def iswriteable(filename):
+    try:
+        st = os.stat(filename)
+        import stat
+        perm = stat.S_IMODE(st[stat.ST_MODE])
+        return perm & stat.S_IWRITE
+    except WindowsError:
+        return True
+
+
+def replaceIfDifferent(tmpfilename, filename):
+    """
+    Replace filename with tmpfilename if they differ.
+    Also checks out the file from perforce if necessary.
+    Returns non-zero if the files differ.
+    """
+
+    # This is going to require the diff utility installed. You can download one from
+    # unixutils, here: http://unxutils.sourceforge.net/
+    # If you are on Mac, you should already have on installed...
+    filesDiffer = os.system('diff -i -w -b -B -a "%s" "%s" > NUL' % (tmpfilename, filename))
+    if filesDiffer:
+        if not iswriteable(filename):
+            # Ok, we are going to assume that you have perforce here. For the people who doesn't, 
+            # please replace this with whatever you need.
+            os.system( 'p4 edit "%s" > nul' % filename )
+        try:
+            os.unlink( filename )
+        except (WindowsError,IOError):
+            pass
+        try:
+            os.rename( tmpfilename, filename )
+        except (WindowsError,OSError), e:
+            logging.error("%s: Unable to rename %s to %s." % (str(e) ,tmpfilename, filename ))
+            raise
+    return filesDiffer
+
+
 def writeConfigFile( filename, data ):
     assert( isinstance( filename, type('') ) )
     assert( isinstance( data, type('') ) )
-    logging.debug( 'About to write the final text configuration file to "%s"' % filename )
-    # TODO: Here we can insert hooks for automatically checkout files from sourcecontrol
-    stream = file( filename, 'wt' )
-    stream.write(data)
-    stream.close()
+    tmpfilename = "%s%d.tmp" % (filename, os.getpid())
+    with open( tmpfilename, "wt" ) as stream:
+        stream.write(data)
+        stream.close()
+    if replaceIfDifferent(tmpfilename, filename):
+        logging.debug( 'Wrote new final text configuration file to "%s"' % filename )
+    else:
+        logging.debug( '"%s" left unchanged' % filename)
+    try:
+        os.unlink( tmpfilename )
+    except (WindowsError,IOError):
+        pass
 
 def findFile( basePath, searchName, platform ):
     """
         Typically this function is called from findDependencies, it resolves a .vcproj file typically given a platform and a base directory.
-        A recursive search is performed to try to find the filename. If there are multiple candidates, the platform must match. If only 
+        A recursive search is performed to try to find the filename. If there are multiple candidates, the platform must match. If only
         one candidate is found, it's assumed that the platform matches.
-        
+
         Returns a full path to the requested filename
     """
     logging.debug( 'Trying to find file %s with platform %s under %s' % (searchName, platform, basePath))
@@ -229,7 +285,7 @@ def findFile( basePath, searchName, platform ):
             if platform.lower() != candidateParentDir.lower():
                 continue
             return fullName
-    # Ok, if we find just *one* instance of the .vcproj or similar file, we can be resonable sure that the user wanted this 
+    # Ok, if we find just *one* instance of the .vcproj or similar file, we can be resonable sure that the user wanted this
     # dependency in the solution, this to allow "foreign" projects not generated by BadgerConfig, but that we still want to depend upon.
     if len(candidates) == 1:
         return candidates[0]
@@ -240,7 +296,7 @@ def findDependencies( basePath, dependencies, searchPaths, platform, fileNameFun
         Resolve dependencies given a list of dependencies from the ini file (comma separated list) and a list of search paths (comma separated list)
         as well as the platform and a callback function that can transform the dependency name into a filename, e.g. given a dependency
         "Foo" the function could return "Foo.vcproj".
-        
+
         Returns a list of paths to the resolved depndency files
     """
     assert( isinstance( basePath, type('') ) )
@@ -252,7 +308,7 @@ def findDependencies( basePath, dependencies, searchPaths, platform, fileNameFun
     result = []
     if len(dependencies) and 0 == len(searchPaths):
         raise SyntaxError( 'We have dependencies, but no search paths' )
-    
+
     searchPaths = [ PathHelp.normalize( os.path.join(basePath, x ) ) for x in searchPaths.split(';') ]
     for dependency in dependencies.split(';'):
         dependency = string.strip(dependency)

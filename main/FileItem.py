@@ -111,6 +111,8 @@ def fixupUnique( fileItems ):
             item.outputBase = myname + '_%d' % UNIQUE_COUNTER
             UNIQUE_COUNTER += 1
         result.append(item)
+    
+    result.sort(sortOnFileName)
     return result
 
 def readSourceFiles( baseDir, commaSeparatedSourceFilesList ):
