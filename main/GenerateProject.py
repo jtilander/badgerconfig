@@ -39,6 +39,15 @@ CONFIGTYPE_TABLE = {
     'WindowsApplication'    : 'Application',
 }
 
+CONFIGTYPE_TABLE_EXT = {
+    'ConsoleApplication'    : '.exe',
+    'MfcApplication'        : '.exe',
+    'MfcDynamicLibrary'     : '.dll',
+    'StaticLibrary'         : '.lib',
+    'DynamicLibrary'        : '.dll',
+    'WindowsApplication'    : '.exe',
+}
+
 MFC_USAGE_TABLE = {
     'ConsoleApplication'    : 'false',
     'MfcApplication'        : 'Dynamic',
@@ -384,22 +393,30 @@ def main( argv ):
             projectDict['outputfilename'] = '$(ProjectName)'
 
         outputfile = '$(TargetName)$(TargetExt)'
+        outputext = CONFIGTYPE_TABLE_EXT[generalDict['type']]
+
         if 'outputfile' in projectDict:
             outputfile = os.path.normpath(projectDict['outputfile'])
             outputdir = os.path.dirname(outputfile)
             projectDict['outputfolder'] = outputdir + '\\'
             projectDict['outputfilename'] = os.path.splitext(os.path.basename(outputfile))[0]
+            outputext = os.path.splitext(outputfile)[1]
 
         for configType in Engine.CONFIGURATION_NAMES__NAKED:
             configOutputfolder = configType.lower() + 'outputfolder'
             if configOutputfolder not in projectDict:
                 projectDict[configOutputfolder] = projectDict['outputfolder']
             
-            #the output file needs to use the outdir
+            # the output file needs to use the outdir
             configOutputfile = configType.lower() + 'outputfile'
             configOutputfilename = configType.lower() + 'outputfilename'
             projectDict[configOutputfile] = '$(OutDir)\\' + os.path.basename(outputfile)
             projectDict[configOutputfilename] = projectDict['outputfilename']
+
+            # We also need to set the extension, otherwise msbuild will complain if we change the extension to something non-standard
+            # (e.g. think maya .mll files for regular .dll file)
+            configOutputExt = configType.lower() + 'outputext'
+            projectDict[configOutputExt] = outputext
 
         # Ensure that we have a debuginformation format
         if 'debuginformationformat' not in projectDict:

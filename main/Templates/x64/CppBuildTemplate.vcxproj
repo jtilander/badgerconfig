@@ -131,6 +131,7 @@ Warnings disabled permanently:
     <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>%%%DEBUGOUTPUTFILENAME%%%</TargetName>
+    <TargetExt>%%%DEBUGOUTPUTEXT%%%</TargetExt>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%RELEASENAME%%%|%%%PLATFORMNAME%%%'">
@@ -138,6 +139,7 @@ Warnings disabled permanently:
     <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>%%%RELEASEOUTPUTFILENAME%%%</TargetName>
+    <TargetExt>%%%RELEASEOUTPUTEXT%%%</TargetExt>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='%%%PROFILENAME%%%|%%%PLATFORMNAME%%%'">
@@ -145,6 +147,7 @@ Warnings disabled permanently:
     <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>%%%PROFILEOUTPUTFILENAME%%%</TargetName>
+    <TargetExt>%%%PROFILEOUTPUTEXT%%%</TargetExt>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
@@ -154,6 +157,7 @@ Warnings disabled permanently:
     <IntDir>$(OBJDIR)\$(ProjectName)_$(PlatformName)_$(Configuration)_$(ProjectGuid)_VS2013\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>%%%FINALOUTPUTFILENAME%%%</TargetName>
+    <TargetExt>%%%FINALOUTPUTEXT%%%</TargetExt>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   
@@ -186,7 +190,7 @@ Warnings disabled permanently:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;4239;4201;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
@@ -228,7 +232,7 @@ Warnings disabled permanently:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;4239;4201;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
@@ -270,7 +274,7 @@ Warnings disabled permanently:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;28251;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;28251;4239;4201;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
@@ -313,7 +317,7 @@ Warnings disabled permanently:
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4512;4127;4996;4291;4291;4800;4239;4201;%%%DISABLEDVCWARNINGS%%%</DisableSpecificWarnings>
       <UseFullPaths>false</UseFullPaths>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <ErrorReporting>None</ErrorReporting>
