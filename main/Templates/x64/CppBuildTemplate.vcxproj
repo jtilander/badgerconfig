@@ -201,6 +201,9 @@ Warnings disabled permanently:
     <PostBuildEvent>
       <Command>%%%POSTBUILDCOMMAND%%%</Command>
     </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>%%%PRELINKCOMMAND%%%</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='%%%RELEASENAME%%%|%%%PLATFORMNAME%%%'">
@@ -243,6 +246,9 @@ Warnings disabled permanently:
     <PostBuildEvent>
       <Command>%%%POSTBUILDCOMMAND%%%</Command>
     </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>%%%PRELINKCOMMAND%%%</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='%%%PROFILENAME%%%|%%%PLATFORMNAME%%%'">
@@ -286,6 +292,9 @@ Warnings disabled permanently:
     <PostBuildEvent>
       <Command>%%%POSTBUILDCOMMAND%%%</Command>
     </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>%%%PRELINKCOMMAND%%%</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='%%%FINALNAME%%%|%%%PLATFORMNAME%%%'">
@@ -328,6 +337,9 @@ Warnings disabled permanently:
     <PostBuildEvent>
       <Command>%%%POSTBUILDCOMMAND%%%</Command>
     </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>%%%PRELINKCOMMAND%%%</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
 
 <!-- ======================================================================================================================== -->

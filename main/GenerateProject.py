@@ -451,18 +451,23 @@ def main( argv ):
         template = template.replace('{{{REFERENCESSECTION}}}', referenceSection )
 
         #
-        # Now we can override the postbuild commands for each configuration...
+        # Now we can override the postbuild and prelink commands for each configuration...
         #
-        postbuildCommand = ''
-        if 'postbuildcommand' in projectDict.keys():
-            postbuildCommand = projectDict['postbuildcommand']
-        for config in Engine.CONFIGURATION_NAMES__NAKED:
-            name = config.lower() + 'postbuildcommand'
-            if name in projectDict.keys():
-                continue
-            projectDict[name] = postbuildCommand
-            #print 'KEY: %32s = %s' % (name, postbuildCommand)
+        def setConfigKey(keyname):
+            candidate = ''
+            if keyname in projectDict.keys():
+                candidate = projectDict[keyname]
+            for config in Engine.CONFIGURATION_NAMES__NAKED:
+                name = config.lower() + keyname
+                if name in projectDict.keys():
+                    continue
+                projectDict[name] = candidate
+                #print 'KEY: %32s = %s' % (name, candidate)
         
+        setConfigKey('postbuildcommand')
+        setConfigKey('prelinkcommand')
+
+
         #
         # Some of the keywords needs some special attention before they can be inserted into the xml file.
         # Set the rules before calling the substiution engine.
